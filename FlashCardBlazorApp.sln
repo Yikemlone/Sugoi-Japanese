@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32819.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlashCardBlazorApp.Server", "FlashCardBlazorApp\Server\FlashCardBlazorApp.Server.csproj", "{0B43D48B-4E1A-4FB1-905F-C8AEF1E53554}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlashCardBlazorApp.Client", "FlashCardBlazorApp\Client\FlashCardBlazorApp.Client.csproj", "{F56FB580-1470-4322-AC73-0372BA0A6158}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlashCardBlazorApp.Shared", "FlashCardBlazorApp\Shared\FlashCardBlazorApp.Shared.csproj", "{BC82FDC8-7BC3-42D6-9A24-710B8D063922}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlashCardBlazorApp.DataAccess", "FlashCardBlazorApp.DataAccess\FlashCardBlazorApp.DataAccess.csproj", "{387ACF26-FB48-4F87-95CD-01824F20DCF8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlashCardBlazorApp.Models", "FlashCardBlazorApp.Model\FlashCardBlazorApp.Models.csproj", "{6829B3CE-F08E-476B-A957-27726A6B6119}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0B43D48B-4E1A-4FB1-905F-C8AEF1E53554}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B43D48B-4E1A-4FB1-905F-C8AEF1E53554}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B43D48B-4E1A-4FB1-905F-C8AEF1E53554}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B43D48B-4E1A-4FB1-905F-C8AEF1E53554}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F56FB580-1470-4322-AC73-0372BA0A6158}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F56FB580-1470-4322-AC73-0372BA0A6158}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F56FB580-1470-4322-AC73-0372BA0A6158}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F56FB580-1470-4322-AC73-0372BA0A6158}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC82FDC8-7BC3-42D6-9A24-710B8D063922}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC82FDC8-7BC3-42D6-9A24-710B8D063922}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC82FDC8-7BC3-42D6-9A24-710B8D063922}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC82FDC8-7BC3-42D6-9A24-710B8D063922}.Release|Any CPU.Build.0 = Release|Any CPU
+		{387ACF26-FB48-4F87-95CD-01824F20DCF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{387ACF26-FB48-4F87-95CD-01824F20DCF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{387ACF26-FB48-4F87-95CD-01824F20DCF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{387ACF26-FB48-4F87-95CD-01824F20DCF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6829B3CE-F08E-476B-A957-27726A6B6119}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6829B3CE-F08E-476B-A957-27726A6B6119}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6829B3CE-F08E-476B-A957-27726A6B6119}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6829B3CE-F08E-476B-A957-27726A6B6119}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D5E35E61-6B49-430C-A50F-FB0C3A7F0A21}
+	EndGlobalSection
+EndGlobal
