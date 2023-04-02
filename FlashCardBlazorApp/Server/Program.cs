@@ -24,6 +24,7 @@ namespace FlashCardBlazorApp
 
             // This may be all I need 
             builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             builder.Services.AddIdentityServer()
