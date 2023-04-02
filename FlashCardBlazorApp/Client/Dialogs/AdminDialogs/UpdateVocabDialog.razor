@@ -6,32 +6,31 @@
         <MudPaper>
             <MudForm>
 
-                <MudStack>
+                <MudStack Row=true>
                     <MudSelect @bind-Value="Vocab.JLPT" Variant="Variant.Filled" Required RequiredError="You must select a JLPT Rating.">
-                        <MudSelectItem Value="@("G")">JLPT1</MudSelectItem>
-                        <MudSelectItem Value="@("PG")">JLPT2</MudSelectItem>
-                        <MudSelectItem Value="@("12A")">JLPT3</MudSelectItem>
-                        <MudSelectItem Value="@("15A")">JLPT4</MudSelectItem>
-                        <MudSelectItem Value="@("16")">JLPT5</MudSelectItem>
+                        <MudSelectItem Value="@("JLPT1")">JLPT1</MudSelectItem>
+                        <MudSelectItem Value="@("JLPT2")">JLPT2</MudSelectItem>
+                        <MudSelectItem Value="@("JLPT3")">JLPT3</MudSelectItem>
+                        <MudSelectItem Value="@("JLPT4")">JLPT4</MudSelectItem>
+                        <MudSelectItem Value="@("JLPT5")">JLPT5</MudSelectItem>
                     </MudSelect>
 
                     <MudSelect @bind-Value="Vocab.VocabPos" Variant="Variant.Filled" Required RequiredError="You must select an Vocab Pos.">
-                        <MudSelectItem Value="@("G")">JLPT1</MudSelectItem>
-                        <MudSelectItem Value="@("PG")">JLPT2</MudSelectItem>
-                        <MudSelectItem Value="@("12A")">JLPT3</MudSelectItem>
-                        <MudSelectItem Value="@("15A")">JLPT4</MudSelectItem>
-                        <MudSelectItem Value="@("16")">JLPT5</MudSelectItem>
+                        <MudSelectItem Value="@("Verb")">Verb</MudSelectItem>
+                        <MudSelectItem Value="@("Noun")">Noun</MudSelectItem>
+                        <MudSelectItem Value="@("Adjective")">Adjective</MudSelectItem>
+                        <MudSelectItem Value="@("Adverb")">Adverb</MudSelectItem>
                     </MudSelect>
                 </MudStack>
 
-                <MudStack Row=true>
-                    <MudTextField T="string" Label="Name" Variant="Variant.Filled" Required RequiredError="You must enter a Name." @bind-Value=Vocab.VocabExpression></MudTextField>
-                    <MudTextField T="string" Label="Duration" Variant="Variant.Filled" Required RequiredError="You must enter a Duration." @bind-Value=@Vocab.VocabKana></MudTextField>
-                    <MudTextField T="string" Label="Duration" Variant="Variant.Filled" Required RequiredError="You must enter a Duration." @bind-Value=@Vocab.SentenceExpression></MudTextField>
-                    <MudTextField T="string" Label="Duration" Variant="Variant.Filled" Required RequiredError="You must enter a Duration." @bind-Value=@Vocab.SentenceKana></MudTextField>
-                    <MudTextField T="string" Label="Duration" Variant="Variant.Filled" Required RequiredError="You must enter a Duration." @bind-Value=@Vocab.SentenceMeaning></MudTextField>
-                    <MudTextField T="string" Label="Duration" Variant="Variant.Filled" Required RequiredError="You must enter a Duration." @bind-Value=@Vocab.VocabFurigana></MudTextField>
-                    <MudTextField T="string" Label="Duration" Variant="Variant.Filled" Required RequiredError="You must enter a Duration." @bind-Value=@Vocab.SentenceFurigana></MudTextField>
+                <MudStack>
+                    <MudTextField T="string" Label="VocabExpression" Variant="Variant.Filled" Required RequiredError="You must enter a VocabExpression." @bind-Value=Vocab.VocabExpression></MudTextField>
+                    <MudTextField T="string" Label="VocabKana" Variant="Variant.Filled" Required RequiredError="You must enter a VocabKana." @bind-Value=@Vocab.VocabKana></MudTextField>
+                    <MudTextField T="string" Label="SentenceExpression" Variant="Variant.Filled" Required RequiredError="You must enter a SentenceExpression." @bind-Value=@Vocab.SentenceExpression></MudTextField>
+                    <MudTextField T="string" Label="SentenceKana" Variant="Variant.Filled" Required RequiredError="You must enter a SentenceKana." @bind-Value=@Vocab.SentenceKana></MudTextField>
+                    <MudTextField T="string" Label="SentenceMeaning" Variant="Variant.Filled" Required RequiredError="You must enter a SentenceMeaning." @bind-Value=@Vocab.SentenceMeaning></MudTextField>
+                    <MudTextField T="string" Label="VocabFurigana" Variant="Variant.Filled" Required RequiredError="You must enter a VocabFurigana." @bind-Value=@Vocab.VocabFurigana></MudTextField>
+                    <MudTextField T="string" Label="SentenceFurigana" Variant="Variant.Filled" Required RequiredError="You must enter a SentenceFurigana." @bind-Value=@Vocab.SentenceFurigana></MudTextField>
                 </MudStack>
 
             </MudForm>
