@@ -1,8 +1,7 @@
-using FlashCardBlazorApp.Client;
-using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using MudBlazor.Services;
 
 namespace FlashCardBlazorApp.Client
 {
@@ -20,6 +19,9 @@ namespace FlashCardBlazorApp.Client
             builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("FlashCardBlazorApp.ServerAPI"));
 
             builder.Services.AddApiAuthorization();
+            
+            // Adding MudBlazor
+            builder.Services.AddMudServices();
 
             await builder.Build().RunAsync();
         }
