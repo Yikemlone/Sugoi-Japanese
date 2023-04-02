@@ -8,5 +8,6 @@ namespace FlashCardBlazorApp.Models.Models
         public int ID { get; set; }
 
         public string RoleName { get; set; } = string.Empty;
+        public List<UserRole> UserRoles { get; set; }
     }
 }
