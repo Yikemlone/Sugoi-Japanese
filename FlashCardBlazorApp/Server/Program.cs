@@ -1,6 +1,6 @@
 using FlashCardBlazorApp.DataAccess.Data;
+using FlashCardBlazorApp.DataAccess.Services.UnitOfWorkService;
 using FlashCardBlazorApp.Models.Models;
-using FlashCardBlazorApp.Shared.DTOs;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +23,7 @@ namespace FlashCardBlazorApp
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
-            // This may be all I need 
+            // Identity Services
             builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -33,6 +33,9 @@ namespace FlashCardBlazorApp
 
             builder.Services.AddAuthentication()
                 .AddIdentityServerJwt();
+
+            // UnitOfWork
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             var app = builder.Build();
 

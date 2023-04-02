@@ -1,5 +1,6 @@
 ﻿@using FlashCardBlazorApp.Client.Dialogs.AdminDialogs
 @inherits ComponentBase
+@inject HttpClient Http
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
 
@@ -21,7 +22,7 @@
 <MudGrid>
     <MudTable 
         Items="@_vocabs" 
-        T="VocabDTO" 
+        T="Vocab" 
         Breakpoint="Breakpoint.Sm" 
         Style="width: 100%"
         @ref="_mudTable" 
@@ -38,7 +39,7 @@
         ServerData="ServerReload">
 
         <ToolBarContent>
-            <MudText Typo="Typo.h6">Edit Movie Listings</MudText>
+            <MudText Typo="Typo.h6">Edit Vocab</MudText>
             <MudSpacer />
 
             <MudTextField T="string" Placeholder="Search" Adornment="Adornment.Start" ValueChanged="@(s=>OnSearch(s))" 
@@ -61,13 +62,13 @@
 
         <HeaderContent>
             <MudTh>
-                <MudTableSortLabel SortLabel="JLPT" T="VocabDTO">
+                <MudTableSortLabel SortLabel="JLPT" T="Vocab">
                     JLPT
                 </MudTableSortLabel>
             </MudTh>
 
             <MudTh>
-                <MudTableSortLabel SortLabel="VocabPos" T="VocabDTO">
+                <MudTableSortLabel SortLabel="VocabPos" T="Vocab">
                     Vocab Pos
                  </MudTableSortLabel>
             </MudTh>
@@ -133,16 +134,14 @@
     private int _totalItems;
     private int[] _pageSizeOptions;
 
-    private HttpClient _client;
-    private VocabDTO? _selected;
-    private MudTable<VocabDTO>? _mudTable;
+    private Vocab? _selected;
+    private MudTable<Vocab>? _mudTable;
     private DialogOptions _dialogOptions;
-    private IEnumerable<VocabDTO>? _vocabs;
+    private IEnumerable<Vocab>? _vocabs;
 
     // Set up
     public VocabTable()
     {
-        _client = new HttpClient() { BaseAddress = new Uri("https://localhost:7016") };
         _buttonDisabled = true;
         _searchString = "";
         _pageSizeOptions = new int[] { 5, 10, 20 };
@@ -162,7 +161,7 @@
 
 
     // Table Event Functions
-    private void RowClickEvent(TableRowClickEventArgs<VocabDTO> tableRowClickEventArgs)
+    private void RowClickEvent(TableRowClickEventArgs<Vocab> tableRowClickEventArgs)
     {
         _selected = tableRowClickEventArgs.Item;
 
@@ -176,7 +175,7 @@
         }
     }
 
-    private string SelectedRowClassFunc(VocabDTO element, int rowNumber)
+    private string SelectedRowClassFunc(Vocab element, int rowNumber)
     {
         if (_selected != null && _selected.Equals(element))
         {
@@ -201,7 +200,7 @@
         var parameters = new DialogParameters();
         parameters.Add("MudTable", _mudTable);
 
-        DialogService.Show<CreateMovieDialog>("Create New Vocab", parameters, _dialogOptions);
+        DialogService.Show<CreateVocabDialog>("Create Vocab", parameters, _dialogOptions);
     }
 
     private void OpenUpdateDialog()
@@ -210,7 +209,7 @@
         parameters.Add("Vocab", _selected);
         parameters.Add("MudTable", _mudTable);
 
-        DialogService.Show<UpdateMovieDialog>("Update Vocab", parameters, _dialogOptions);
+        DialogService.Show<UpdateVocabDialog>("Update Vocab", parameters, _dialogOptions);
     }
 
     private void OpenDeleteDialog()
@@ -219,7 +218,7 @@
         parameters.Add("Vocab", _selected);
         parameters.Add("MudTable", _mudTable);
 
-        DialogService.Show<DeleteMovieDialog>("Delete Vocab", parameters, new DialogOptions()
+        DialogService.Show<DeleteVocabDialog>("Delete Vocab", parameters, new DialogOptions()
         {
             CloseButton = true,
             MaxWidth = MaxWidth.Medium,
@@ -229,9 +228,9 @@
 
 
     // Server Reload Data
-    protected async Task<TableData<VocabDTO>> ServerReload(TableState state)
+    protected async Task<TableData<Vocab>> ServerReload(TableState state)
     {
-        IEnumerable<VocabDTO> updatedMovies = await GetVocabsAsync();
+        IEnumerable<Vocab> updatedMovies = await GetVocabsAsync();
 
         updatedMovies = updatedMovies.Where(movie =>
         {
@@ -259,12 +258,12 @@
         }
 
         _vocabs = updatedMovies.Skip(state.Page * state.PageSize).Take(state.PageSize);
-        return new TableData<VocabDTO>() { TotalItems = _totalItems, Items = _vocabs };
+        return new TableData<Vocab>() { TotalItems = _totalItems, Items = _vocabs };
     }
 
-    public async Task<List<VocabDTO>> GetVocabsAsync()
+    public async Task<List<Vocab>> GetVocabsAsync()
     {
-        return await _client.GetFromJsonAsync<List<VocabDTO>>(API_URL + "/movies");
+        return await Http.GetFromJsonAsync<List<Vocab>>(API_URL + "/vocabs");
     }
 
 }

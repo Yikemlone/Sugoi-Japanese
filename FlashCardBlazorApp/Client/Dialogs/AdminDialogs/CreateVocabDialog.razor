@@ -1,4 +1,5 @@
-﻿@using FlashCardBlazorApp.Shared.DTOs
+﻿@using FlashCardBlazorApp.Models.Models
+@inject HttpClient Http
 @inject ISnackbar Snackbar
 
 <MudDialog>
@@ -7,7 +8,7 @@
             <MudForm>
 
                 <MudStack>
-                    <MudSelect @bind-Value="Vocab.JLPT" Variant="Variant.Filled" Required RequiredError="You must select a JLPT Rating.">
+                    <MudSelect @bind-Value="_vocab.JLPT" Variant="Variant.Filled" Required RequiredError="You must select a JLPT Rating.">
                         <MudSelectItem Value="@("G")">JLPT1</MudSelectItem>
                         <MudSelectItem Value="@("PG")">JLPT2</MudSelectItem>
                         <MudSelectItem Value="@("12A")">JLPT3</MudSelectItem>
@@ -15,7 +16,7 @@
                         <MudSelectItem Value="@("16")">JLPT5</MudSelectItem>
                     </MudSelect>
 
-                    <MudSelect @bind-Value="Vocab.VocabPos" Variant="Variant.Filled" Required RequiredError="You must select an Vocab Pos.">
+                    <MudSelect @bind-Value="_vocab.VocabPos" Variant="Variant.Filled" Required RequiredError="You must select an Vocab Pos.">
                         <MudSelectItem Value="@("G")">JLPT1</MudSelectItem>
                         <MudSelectItem Value="@("PG")">JLPT2</MudSelectItem>
                         <MudSelectItem Value="@("12A")">JLPT3</MudSelectItem>
@@ -25,13 +26,13 @@
                 </MudStack>
 
                 <MudStack Row=true>
-                    <MudTextField T="string" Label="Name" Variant="Variant.Filled" Required RequiredError="You must enter a Name." @bind-Value=Vocab.VocabExpression></MudTextField>
-                    <MudTextField T="string" Label="Duration" Variant="Variant.Filled" Required RequiredError="You must enter a Duration." @bind-Value=@Vocab.VocabKana></MudTextField>
-                    <MudTextField T="string" Label="Duration" Variant="Variant.Filled" Required RequiredError="You must enter a Duration." @bind-Value=@Vocab.SentenceExpression></MudTextField>
-                    <MudTextField T="string" Label="Duration" Variant="Variant.Filled" Required RequiredError="You must enter a Duration." @bind-Value=@Vocab.SentenceKana></MudTextField>
-                    <MudTextField T="string" Label="Duration" Variant="Variant.Filled" Required RequiredError="You must enter a Duration." @bind-Value=@Vocab.SentenceMeaning></MudTextField>
-                    <MudTextField T="string" Label="Duration" Variant="Variant.Filled" Required RequiredError="You must enter a Duration." @bind-Value=@Vocab.VocabFurigana></MudTextField>
-                    <MudTextField T="string" Label="Duration" Variant="Variant.Filled" Required RequiredError="You must enter a Duration." @bind-Value=@Vocab.SentenceFurigana></MudTextField>
+                    <MudTextField T="string" Label="Name" Variant="Variant.Filled" Required RequiredError="You must enter a Name." @bind-Value=_vocab.VocabExpression></MudTextField>
+                    <MudTextField T="string" Label="Duration" Variant="Variant.Filled" Required RequiredError="You must enter a Duration." @bind-Value=@_vocab.VocabKana></MudTextField>
+                    <MudTextField T="string" Label="Duration" Variant="Variant.Filled" Required RequiredError="You must enter a Duration." @bind-Value=@_vocab.SentenceExpression></MudTextField>
+                    <MudTextField T="string" Label="Duration" Variant="Variant.Filled" Required RequiredError="You must enter a Duration." @bind-Value=@_vocab.SentenceKana></MudTextField>
+                    <MudTextField T="string" Label="Duration" Variant="Variant.Filled" Required RequiredError="You must enter a Duration." @bind-Value=@_vocab.SentenceMeaning></MudTextField>
+                    <MudTextField T="string" Label="Duration" Variant="Variant.Filled" Required RequiredError="You must enter a Duration." @bind-Value=@_vocab.VocabFurigana></MudTextField>
+                    <MudTextField T="string" Label="Duration" Variant="Variant.Filled" Required RequiredError="You must enter a Duration." @bind-Value=@_vocab.SentenceFurigana></MudTextField>
                 </MudStack>
 
             </MudForm>
@@ -46,21 +47,19 @@
 
 @code {
     private const string API_URL = "api/vocab";
-    private HttpClient? _client;
-    private DateTime? _ReleaseDate;
+    private Vocab? _vocab;
 
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
-    [Parameter] public MudTable<VocabDTO> MudTable { get; set; }
-    [Parameter] public VocabDTO Vocab { get; set; }
+    [Parameter] public MudTable<Vocab> MudTable { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        _client = new HttpClient() { BaseAddress = new Uri("https://localhost:7016") };
+        _vocab = new Vocab();
     }
 
     private async void Close()
     {
-        await AddMovieModel();
+        await AddVocabAsync();
 
         Snackbar.Configuration.SnackbarVariant = Variant.Filled;
         Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopRight;
@@ -75,12 +74,13 @@
 
     private void Cancel()
     {
+        _vocab = null;
         MudDialog.Close(DialogResult.Cancel());
     }
 
-    private async Task AddMovieModel()
+    private async Task AddVocabAsync()
     {
-        await _client.PostAsJsonAsync<VocabDTO>(API_URL + "/update/", Vocab);
+        await Http.PostAsJsonAsync<Vocab>(API_URL + "/create", _vocab);
         await MudTable.ReloadServerData();
     }
 }

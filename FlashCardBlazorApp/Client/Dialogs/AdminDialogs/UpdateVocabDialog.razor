@@ -1,0 +1,80 @@
+﻿@inject ISnackbar Snackbar
+@inject HttpClient Http
+
+<MudDialog>
+    <DialogContent>
+        <MudPaper>
+            <MudForm>
+
+                <MudStack>
+                    <MudSelect @bind-Value="Vocab.JLPT" Variant="Variant.Filled" Required RequiredError="You must select a JLPT Rating.">
+                        <MudSelectItem Value="@("G")">JLPT1</MudSelectItem>
+                        <MudSelectItem Value="@("PG")">JLPT2</MudSelectItem>
+                        <MudSelectItem Value="@("12A")">JLPT3</MudSelectItem>
+                        <MudSelectItem Value="@("15A")">JLPT4</MudSelectItem>
+                        <MudSelectItem Value="@("16")">JLPT5</MudSelectItem>
+                    </MudSelect>
+
+                    <MudSelect @bind-Value="Vocab.VocabPos" Variant="Variant.Filled" Required RequiredError="You must select an Vocab Pos.">
+                        <MudSelectItem Value="@("G")">JLPT1</MudSelectItem>
+                        <MudSelectItem Value="@("PG")">JLPT2</MudSelectItem>
+                        <MudSelectItem Value="@("12A")">JLPT3</MudSelectItem>
+                        <MudSelectItem Value="@("15A")">JLPT4</MudSelectItem>
+                        <MudSelectItem Value="@("16")">JLPT5</MudSelectItem>
+                    </MudSelect>
+                </MudStack>
+
+                <MudStack Row=true>
+                    <MudTextField T="string" Label="Name" Variant="Variant.Filled" Required RequiredError="You must enter a Name." @bind-Value=Vocab.VocabExpression></MudTextField>
+                    <MudTextField T="string" Label="Duration" Variant="Variant.Filled" Required RequiredError="You must enter a Duration." @bind-Value=@Vocab.VocabKana></MudTextField>
+                    <MudTextField T="string" Label="Duration" Variant="Variant.Filled" Required RequiredError="You must enter a Duration." @bind-Value=@Vocab.SentenceExpression></MudTextField>
+                    <MudTextField T="string" Label="Duration" Variant="Variant.Filled" Required RequiredError="You must enter a Duration." @bind-Value=@Vocab.SentenceKana></MudTextField>
+                    <MudTextField T="string" Label="Duration" Variant="Variant.Filled" Required RequiredError="You must enter a Duration." @bind-Value=@Vocab.SentenceMeaning></MudTextField>
+                    <MudTextField T="string" Label="Duration" Variant="Variant.Filled" Required RequiredError="You must enter a Duration." @bind-Value=@Vocab.VocabFurigana></MudTextField>
+                    <MudTextField T="string" Label="Duration" Variant="Variant.Filled" Required RequiredError="You must enter a Duration." @bind-Value=@Vocab.SentenceFurigana></MudTextField>
+                </MudStack>
+
+            </MudForm>
+        </MudPaper>
+    </DialogContent>
+
+    <DialogActions>
+        <MudButton Color="Color.Primary" OnClick="Close">Save</MudButton>
+        <MudButton Color="Color.Secondary" OnClick="Cancel">Cancel</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    private const string API_URL = "api/vocab";
+    private DateTime? _ReleaseDate;
+
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [Parameter] public MudTable<Vocab> MudTable { get; set; }
+    [Parameter] public Vocab Vocab { get; set; }
+
+    private async void Close()
+    {
+        await UpdateVocabAsync();
+
+        Snackbar.Configuration.SnackbarVariant = Variant.Filled;
+        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopRight;
+        Snackbar.Add("Vocab Updated", Severity.Success, config =>
+        {
+            config.VisibleStateDuration = 1000;
+            config.Icon = @Icons.Material.Outlined.Check;
+        });
+
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+
+    private void Cancel()
+    {
+        MudDialog.Close(DialogResult.Cancel());
+    }
+
+    private async Task UpdateVocabAsync()
+    {
+        await Http.PostAsJsonAsync<Vocab>(API_URL + "/update", Vocab);
+        await MudTable.ReloadServerData();
+    }
+}

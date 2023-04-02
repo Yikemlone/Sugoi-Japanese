@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\FlashCardBlazorApp.Model\FlashCardBlazorApp.Models.csproj" />
     <ProjectReference Include="..\Shared\FlashCardBlazorApp.Shared.csproj" />
   </ItemGroup>
 

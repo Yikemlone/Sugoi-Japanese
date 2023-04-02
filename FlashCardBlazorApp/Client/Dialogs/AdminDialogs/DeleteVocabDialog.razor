@@ -1,9 +1,9 @@
-﻿@*@using Cinema.Shared.DTO
-@inject ISnackbar Snackbar
+﻿@inject ISnackbar Snackbar
+@inject HttpClient Http
 
 <MudDialog>
     <DialogContent>
-        <p>Are you sure you want to delete <b>@Movie.Name?</b></p>
+        <p>Are you sure you want to delete <b>@Vocab.SentenceMeaning?</b></p>
     </DialogContent>
     <DialogActions>
         <MudButton Color="Color.Primary" OnClick="Close">Delete</MudButton>
@@ -13,25 +13,19 @@
 
 
 @code {
-    private const string API_URL = "api/admin";
-    private HttpClient? _client;
+    private const string API_URL = "api/vocab";
 
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
-    [Parameter] public MovieDTO Movie { get; set; }
-    [Parameter] public MudTable<MovieDTO> MudTable { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        _client = new HttpClient() { BaseAddress = new Uri("https://localhost:7016") };
-    }
+    [Parameter] public Vocab Vocab { get; set; }
+    [Parameter] public MudTable<Vocab> MudTable { get; set; }
 
     public async Task Close()
     {
-        await DeleteMovieAsync();
+        await DeleteVocabAsync();
 
         Snackbar.Configuration.SnackbarVariant = Variant.Filled;
         Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopRight;
-        Snackbar.Add("Movie Deleted", Severity.Success, config =>
+        Snackbar.Add("Vocab Deleted", Severity.Success, config =>
         {
             config.VisibleStateDuration = 1000;
             config.Icon = @Icons.Material.Outlined.Check;
@@ -40,16 +34,15 @@
         MudDialog.Close(DialogResult.Ok(true));
     }
 
-    void Cancel()
+    private void Cancel()
     {
         MudDialog.Close(DialogResult.Cancel());
     }
 
-    public async Task DeleteMovieAsync()
+    public async Task DeleteVocabAsync()
     {
-        await _client.PostAsJsonAsync<int>(API_URL + $"/delete/{Movie.ID}", Movie.ID);
+        await Http.PostAsJsonAsync<Vocab>(API_URL + "/delete", Vocab);
         await MudTable.ReloadServerData();
     }
 
 }
-*@
