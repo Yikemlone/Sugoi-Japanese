@@ -1,0 +1,55 @@
+﻿@*@using Cinema.Shared.DTO
+@inject ISnackbar Snackbar
+
+<MudDialog>
+    <DialogContent>
+        <p>Are you sure you want to delete <b>@Movie.Name?</b></p>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" OnClick="Close">Delete</MudButton>
+        <MudButton Color="Color.Secondary" OnClick="Cancel">Cancel</MudButton>
+    </DialogActions>
+</MudDialog>
+
+
+@code {
+    private const string API_URL = "api/admin";
+    private HttpClient? _client;
+
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [Parameter] public MovieDTO Movie { get; set; }
+    [Parameter] public MudTable<MovieDTO> MudTable { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _client = new HttpClient() { BaseAddress = new Uri("https://localhost:7016") };
+    }
+
+    public async Task Close()
+    {
+        await DeleteMovieAsync();
+
+        Snackbar.Configuration.SnackbarVariant = Variant.Filled;
+        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopRight;
+        Snackbar.Add("Movie Deleted", Severity.Success, config =>
+        {
+            config.VisibleStateDuration = 1000;
+            config.Icon = @Icons.Material.Outlined.Check;
+        });
+
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+
+    void Cancel()
+    {
+        MudDialog.Close(DialogResult.Cancel());
+    }
+
+    public async Task DeleteMovieAsync()
+    {
+        await _client.PostAsJsonAsync<int>(API_URL + $"/delete/{Movie.ID}", Movie.ID);
+        await MudTable.ReloadServerData();
+    }
+
+}
+*@

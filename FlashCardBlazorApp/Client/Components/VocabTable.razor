@@ -1,5 +1,270 @@
-﻿<h3>VocabTable</h3>
+﻿@using FlashCardBlazorApp.Client.Dialogs.AdminDialogs
+@inherits ComponentBase
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+
+<style>
+    .selected {
+        background-color: #ff4081 !important;
+    }
+
+        .selected > td {
+            color: white !important;
+        }
+
+            .selected > td .mud-input {
+                color: white !important;
+            }
+
+</style>
+
+<MudGrid>
+    <MudTable 
+        Items="@_vocabs" 
+        T="VocabDTO" 
+        Breakpoint="Breakpoint.Sm" 
+        Style="width: 100%"
+        @ref="_mudTable" 
+        @bind-SelectedItem="_selected"
+        RowClassFunc="@SelectedRowClassFunc" 
+        OnRowClick="RowClickEvent" 
+        Loading="@(_vocabs == null ? true : false)"
+        LoadingProgressColor="Color.Secondary"
+        Hover="true" 
+        Dense="true"
+        Bordered="true"
+        FixedHeader="true"
+        HorizontalScrollbar="true"
+        ServerData="ServerReload">
+
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">Edit Movie Listings</MudText>
+            <MudSpacer />
+
+            <MudTextField T="string" Placeholder="Search" Adornment="Adornment.Start" ValueChanged="@(s=>OnSearch(s))" 
+                AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
+            </MudTextField>
+
+            <MudSpacer />
+
+            <MudTooltip Text="Add" Placement="Placement.Top" Color="Color.Secondary">
+                <MudIconButton Icon="@Icons.Material.Outlined.Add" Color="Color.Secondary" OnClick="OpenCreateDialog" />
+            </MudTooltip>
+            <MudTooltip Text="Edit" Placement="Placement.Top" Color="Color.Secondary">
+                <MudIconButton Icon="@Icons.Material.Outlined.Edit" Color="Color.Secondary" Disabled=@_buttonDisabled OnClick="OpenUpdateDialog"/>
+            </MudTooltip>
+            <MudTooltip Text="Delete" Placement="Placement.Top" Color="Color.Secondary">
+                <MudIconButton Icon="@Icons.Material.Outlined.Delete" Color="Color.Secondary" Disabled=@_buttonDisabled OnClick="OpenDeleteDialog" />
+            </MudTooltip>
+
+        </ToolBarContent>
+
+        <HeaderContent>
+            <MudTh>
+                <MudTableSortLabel SortLabel="JLPT" T="VocabDTO">
+                    JLPT
+                </MudTableSortLabel>
+            </MudTh>
+
+            <MudTh>
+                <MudTableSortLabel SortLabel="VocabPos" T="VocabDTO">
+                    Vocab Pos
+                 </MudTableSortLabel>
+            </MudTh>
+
+            <MudTh>Vocab Expression</MudTh>
+            <MudTh>VocabKana</MudTh>
+            <MudTh>SentenceExpression</MudTh>
+            <MudTh>SentenceKana</MudTh>
+            <MudTh>SentenceMeaning</MudTh>
+            <MudTh>VocabFurigana</MudTh>
+            <MudTh>SentenceFurigana</MudTh>
+
+        </HeaderContent>
+
+        <RowTemplate>
+            <MudTd DataLabel="JLPT" Style="width: 200px">@context.JLPT</MudTd>
+            <MudTd DataLabel="VocabPos">@context.VocabPos</MudTd>
+            <MudTd DataLabel="VocabExpression">@context.VocabExpression</MudTd>
+            <MudTd DataLabel="VocabKana">@context.VocabKana</MudTd>
+            <MudTd DataLabel="SentenceExpression">@context.SentenceExpression</MudTd>
+            <MudTd DataLabel="SentenceKana">
+                <div style="white-space: nowrap;">
+                    @context.SentenceKana
+                </div>
+            </MudTd>            
+            
+            <MudTd DataLabel="SentenceMeaning">
+                <div style="white-space: nowrap;">
+                    @context.SentenceMeaning
+                </div>
+            </MudTd>         
+            
+            <MudTd DataLabel="VocabFurigana">@context.VocabFurigana</MudTd>
+            
+            <MudTd DataLabel="SentenceFurigana">
+                <div style="white-space: nowrap;">
+                    @context.SentenceFurigana
+                </div>
+            </MudTd>
+
+        </RowTemplate>
+
+        <NoRecordsContent>
+            <MudText>No matching records found</MudText>
+        </NoRecordsContent>
+
+        <LoadingContent>
+            <MudText>Loading...</MudText>
+        </LoadingContent>
+
+        <PagerContent>
+            <MudTablePager PageSizeOptions="@_pageSizeOptions" HorizontalAlignment="HorizontalAlignment.Center"/>
+        </PagerContent>
+
+    </MudTable>
+</MudGrid>
 
 @code {
+    private const string API_URL = "api/vocab";
+
+    private string _searchString;
+    private bool _buttonDisabled;
+    private int _totalItems;
+    private int[] _pageSizeOptions;
+
+    private HttpClient _client;
+    private VocabDTO? _selected;
+    private MudTable<VocabDTO>? _mudTable;
+    private DialogOptions _dialogOptions;
+    private IEnumerable<VocabDTO>? _vocabs;
+
+    // Set up
+    public VocabTable()
+    {
+        _client = new HttpClient() { BaseAddress = new Uri("https://localhost:7016") };
+        _buttonDisabled = true;
+        _searchString = "";
+        _pageSizeOptions = new int[] { 5, 10, 20 };
+        _dialogOptions = new DialogOptions
+        {
+            CloseButton = true,
+            MaxWidth = MaxWidth.Medium,
+            FullWidth = true,
+            DisableBackdropClick = true
+        };
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _vocabs = await GetVocabsAsync();
+    }
+
+
+    // Table Event Functions
+    private void RowClickEvent(TableRowClickEventArgs<VocabDTO> tableRowClickEventArgs)
+    {
+        _selected = tableRowClickEventArgs.Item;
+
+        if (_selected != null)
+        {
+            _buttonDisabled = false;
+        }
+        else
+        {
+            _buttonDisabled = true;
+        }
+    }
+
+    private string SelectedRowClassFunc(VocabDTO element, int rowNumber)
+    {
+        if (_selected != null && _selected.Equals(element))
+        {
+            return "selected";
+        }
+        else
+        {
+            return string.Empty;
+        }
+    }
+
+    private void OnSearch(string text)
+    {
+        _searchString = text;
+        _mudTable.ReloadServerData();
+    }
+
+
+    // Dialogs
+    private void OpenCreateDialog()
+    {
+        var parameters = new DialogParameters();
+        parameters.Add("MudTable", _mudTable);
+
+        DialogService.Show<CreateMovieDialog>("Create New Vocab", parameters, _dialogOptions);
+    }
+
+    private void OpenUpdateDialog()
+    {
+        var parameters = new DialogParameters();
+        parameters.Add("Vocab", _selected);
+        parameters.Add("MudTable", _mudTable);
+
+        DialogService.Show<UpdateMovieDialog>("Update Vocab", parameters, _dialogOptions);
+    }
+
+    private void OpenDeleteDialog()
+    {
+        var parameters = new DialogParameters();
+        parameters.Add("Vocab", _selected);
+        parameters.Add("MudTable", _mudTable);
+
+        DialogService.Show<DeleteMovieDialog>("Delete Vocab", parameters, new DialogOptions()
+        {
+            CloseButton = true,
+            MaxWidth = MaxWidth.Medium,
+            DisableBackdropClick = true
+        });
+    }
+
+
+    // Server Reload Data
+    protected async Task<TableData<VocabDTO>> ServerReload(TableState state)
+    {
+        IEnumerable<VocabDTO> updatedMovies = await GetVocabsAsync();
+
+        updatedMovies = updatedMovies.Where(movie =>
+        {
+            if (string.IsNullOrWhiteSpace(_searchString))
+                return true;
+            if (movie.SentenceExpression.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+                return true;           
+            if (movie.JLPT.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+            if (movie.ID.ToString().Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+            return false;
+        }).ToArray();
+
+        _totalItems = updatedMovies.Count();
+
+        switch (state.SortLabel)
+        {
+            case "JLPT":
+                updatedMovies = updatedMovies.OrderByDirection(state.SortDirection, m => m.JLPT);
+                break;
+            case "VocabPos":
+                updatedMovies = updatedMovies.OrderByDirection(state.SortDirection, m => m.VocabPos);
+                break;
+        }
+
+        _vocabs = updatedMovies.Skip(state.Page * state.PageSize).Take(state.PageSize);
+        return new TableData<VocabDTO>() { TotalItems = _totalItems, Items = _vocabs };
+    }
+
+    public async Task<List<VocabDTO>> GetVocabsAsync()
+    {
+        return await _client.GetFromJsonAsync<List<VocabDTO>>(API_URL + "/movies");
+    }
 
 }

@@ -62,3 +62,13 @@ a, .btn-link {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+
+b {
+    color: #ff4081ff;
+}
+
+.mud-navmenu.mud-navmenu-default .mud-nav-link.active:not(.mud-nav-link-disabled) {
+    color: var(--mud-palette-secondary);
+    background-color: var(--mud-palette-action-default-hover);
+}

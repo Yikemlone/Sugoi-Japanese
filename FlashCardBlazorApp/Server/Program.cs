@@ -1,5 +1,6 @@
 using FlashCardBlazorApp.DataAccess.Data;
 using FlashCardBlazorApp.Models.Models;
+using FlashCardBlazorApp.Shared.DTOs;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
