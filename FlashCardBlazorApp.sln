@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32819.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlashCardBlazorApp.Server", "FlashCardBlazorApp\Server\FlashCardBlazorApp.Server.csproj", "{0B43D48B-4E1A-4FB1-905F-C8AEF1E53554}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlashCardBlazorApp.Server", "FlashCardBlazorApp\Server\FlashCardBlazorApp.Server.csproj", "{0B43D48B-4E1A-4FB1-905F-C8AEF1E53554}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlashCardBlazorApp.Client", "FlashCardBlazorApp\Client\FlashCardBlazorApp.Client.csproj", "{F56FB580-1470-4322-AC73-0372BA0A6158}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlashCardBlazorApp.Client", "FlashCardBlazorApp\Client\FlashCardBlazorApp.Client.csproj", "{F56FB580-1470-4322-AC73-0372BA0A6158}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlashCardBlazorApp.Shared", "FlashCardBlazorApp\Shared\FlashCardBlazorApp.Shared.csproj", "{BC82FDC8-7BC3-42D6-9A24-710B8D063922}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlashCardBlazorApp.Shared", "FlashCardBlazorApp\Shared\FlashCardBlazorApp.Shared.csproj", "{BC82FDC8-7BC3-42D6-9A24-710B8D063922}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlashCardBlazorApp.DataAccess", "FlashCardBlazorApp.DataAccess\FlashCardBlazorApp.DataAccess.csproj", "{387ACF26-FB48-4F87-95CD-01824F20DCF8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlashCardBlazorApp.DataAccess", "FlashCardBlazorApp.DataAccess\FlashCardBlazorApp.DataAccess.csproj", "{387ACF26-FB48-4F87-95CD-01824F20DCF8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlashCardBlazorApp.Models", "FlashCardBlazorApp.Model\FlashCardBlazorApp.Models.csproj", "{6829B3CE-F08E-476B-A957-27726A6B6119}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlashCardBlazorApp.Models", "FlashCardBlazorApp.Model\FlashCardBlazorApp.Models.csproj", "{6829B3CE-F08E-476B-A957-27726A6B6119}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

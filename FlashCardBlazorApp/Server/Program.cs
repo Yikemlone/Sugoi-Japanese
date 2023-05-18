@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.IO;
+using System.Text.RegularExpressions;
 
 namespace FlashCardBlazorApp
 {
@@ -18,7 +20,7 @@ namespace FlashCardBlazorApp
             builder.Services.AddRazorPages();
 
             // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            var connectionString = builder.Configuration.GetConnectionString("LocalConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
@@ -33,6 +35,36 @@ namespace FlashCardBlazorApp
 
             builder.Services.AddAuthentication()
                 .AddIdentityServerJwt();
+
+            var dir = new DirectoryInfo(Environment.CurrentDirectory).Parent.FullName;
+            var csvLines = System.IO.File.ReadAllLines(dir + @"\Shared\japanese.csv");
+            string pattern = @",(?=(?:[^']*'[^']*')*(?![^']*'))"; // ignores commas inside single quotes and double
+
+            for (int i = 1; i < csvLines.Length; i++)
+            {
+                string[] wordDetails = Regex.Split(csvLines[i], pattern);
+
+                var vocab = new Vocab
+                {
+                    ID = i + 1,
+
+                    JLPT = wordDetails[0],
+
+                    VocabExpression = wordDetails[1],
+                    VocabKana = wordDetails[2],
+                    VocabMeaning = wordDetails[3],
+                    VocabSounds = wordDetails[4],
+                    VocabPos = wordDetails[5],
+
+                    SentenceExpression = wordDetails[6],
+                    SentenceKana = wordDetails[7],
+                    SentenceMeaning = wordDetails[8],
+                    SentenceSound = wordDetails[9],
+
+                    VocabFurigana = wordDetails[10],
+                    SentenceFurigana = wordDetails[11]
+                };
+            }
 
             // UnitOfWork
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
