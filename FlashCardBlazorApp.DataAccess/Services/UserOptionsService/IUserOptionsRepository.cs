@@ -3,8 +3,8 @@ using FlashCardBlazorApp.Models.Models;
 
 namespace FlashCardBlazorApp.DataAccess.Services.UserOptionsService
 {
-    public interface IUserOptionsRepository : IRepository<UserOptions>
+    public interface IUserOptionsRepository : IRepository<UserFlashCardOptions>
     {
-        void Update(UserOptions userOptions);
+        void Update(UserFlashCardOptions userOptions);
     }
 }

@@ -4,7 +4,7 @@ using FlashCardBlazorApp.Models.Models;
 
 namespace FlashCardBlazorApp.DataAccess.Services.UserOptionsService
 {
-    public class UserOptionsRepository : Repository<UserOptions>, IUserOptionsRepository
+    public class UserOptionsRepository : Repository<UserFlashCardOptions>, IUserOptionsRepository
     {
         private readonly ApplicationDbContext _context;
 
@@ -13,9 +13,9 @@ namespace FlashCardBlazorApp.DataAccess.Services.UserOptionsService
             _context = context;
         }
 
-        public void Update(UserOptions userOptions) 
+        public void Update(UserFlashCardOptions userOptions) 
         {
-            var optionsFromDB = _context.UserOptions.FirstOrDefault(u => u.ID == userOptions.ID);
+            var optionsFromDB = _context.UserFlashCardOptions.FirstOrDefault(u => u.ID == userOptions.ID);
             if (optionsFromDB == null) return;
 
             optionsFromDB.WordsPerSession = userOptions.WordsPerSession;

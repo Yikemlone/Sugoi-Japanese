@@ -1,0 +1,22 @@
+﻿@inject HttpClient Http
+
+<MudPaper Elevation="1">
+    @if (_quote.Length > 0)
+    {
+        <MudText Typo="Typo.body1">@_quote</MudText>
+    }
+</MudPaper>
+
+
+@code {
+    const string QUOTE_API_LINK = "https://zenquotes.io/api/quotes/";
+    private string _quote;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        _quote = await Http.GetAsync(QUOTE_API_LINK).Result.Content.ReadAsStringAsync();
+
+    }
+}

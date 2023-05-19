@@ -2,16 +2,24 @@
     <Router AppAssembly="@typeof(App).Assembly">
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+
+                <Authorizing>
+                    <MudContainer MaxWidth="MaxWidth.ExtraLarge">
+                        <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate=true/>
+                    </MudContainer>
+                </Authorizing>
+
                 <NotAuthorized>
                     @if (context.User.Identity?.IsAuthenticated != true)
                     {
-                        <RedirectToLogin />
+                            <RedirectToLogin />
                     }
                     else
                     {
-                        <p role="alert">You are not authorized to access this resource.</p>
+                            <p role="alert">You are not authorized to access this resource.</p>
                     }
                 </NotAuthorized>
+
             </AuthorizeRouteView>
             <FocusOnNavigate RouteData="@routeData" Selector="h1" />
         </Found>

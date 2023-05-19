@@ -16,55 +16,61 @@ namespace FlashCardBlazorApp
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddControllersWithViews();
-            builder.Services.AddRazorPages();
-
-            // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("LocalConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-            
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("LocalConnection"))
+            );
 
             // Identity Services
-            builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
+                         .AddEntityFrameworkStores<ApplicationDbContext>()
+                         .AddDefaultTokenProviders();
 
-            builder.Services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+            builder.Services.AddAuthorization(options => {
+                options.AddPolicy("IsAdmin", policy => policy.RequireClaim("AdminRole", "admin"));
+                options.AddPolicy("IsManager", policy => policy.RequireClaim("ManagerRole", "manager"));
+                options.AddPolicy("IsCustomer", policy => policy.RequireClaim("CustomerRole", "customer"));
+            });
 
-            builder.Services.AddAuthentication()
-                .AddIdentityServerJwt();
-
-            var dir = new DirectoryInfo(Environment.CurrentDirectory).Parent.FullName;
-            var csvLines = System.IO.File.ReadAllLines(dir + @"\Shared\japanese.csv");
-            string pattern = @",(?=(?:[^']*'[^']*')*(?![^']*'))"; // ignores commas inside single quotes and double
-
-            for (int i = 1; i < csvLines.Length; i++)
+            builder.Services.Configure<IdentityOptions>(options =>
             {
-                string[] wordDetails = Regex.Split(csvLines[i], pattern);
+                // Password settings
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 6;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireLowercase = false;
 
-                var vocab = new Vocab
+                // Lockout settings
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+                options.Lockout.MaxFailedAccessAttempts = 10;
+                options.Lockout.AllowedForNewUsers = true;
+
+                // User settings
+                options.User.RequireUniqueEmail = false;
+            });
+
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.HttpOnly = true;
+                options.Events.OnRedirectToLogin = context =>
                 {
-                    ID = i + 1,
-
-                    JLPT = wordDetails[0],
-
-                    VocabExpression = wordDetails[1],
-                    VocabKana = wordDetails[2],
-                    VocabMeaning = wordDetails[3],
-                    VocabSounds = wordDetails[4],
-                    VocabPos = wordDetails[5],
-
-                    SentenceExpression = wordDetails[6],
-                    SentenceKana = wordDetails[7],
-                    SentenceMeaning = wordDetails[8],
-                    SentenceSound = wordDetails[9],
-
-                    VocabFurigana = wordDetails[10],
-                    SentenceFurigana = wordDetails[11]
+                    context.Response.StatusCode = 401;
+                    return Task.CompletedTask;
                 };
-            }
+            });
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    policy =>
+                    {
+                        policy.AllowAnyOrigin();  //set the allowed origin  
+                    });
+            });
+
+
+            builder.Services.AddControllersWithViews();
+            builder.Services.AddRazorPages();
 
             // UnitOfWork
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -85,15 +91,14 @@ namespace FlashCardBlazorApp
             }
 
             app.UseHttpsRedirection();
-
             app.UseBlazorFrameworkFiles();
             app.UseStaticFiles();
 
             app.UseRouting();
-
-            app.UseIdentityServer();
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseCors();
 
             app.MapRazorPages();
             app.MapControllers();

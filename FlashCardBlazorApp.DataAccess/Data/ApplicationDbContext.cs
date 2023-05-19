@@ -1,6 +1,5 @@
-﻿using Duende.IdentityServer.EntityFramework.Options;
-using FlashCardBlazorApp.Models.Models;
-using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
+﻿using FlashCardBlazorApp.Models.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -9,18 +8,17 @@ using System.Text.RegularExpressions;
 
 namespace FlashCardBlazorApp.DataAccess.Data
 {
-    public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
         public DbSet<User> Users { get; set; }
-        public DbSet<UserRole> UserRoles { get; set; }
-        public DbSet<UserOptions> UserOptions { get; set; }
-        public DbSet<Role> Roles { get; set; }
+        public DbSet<UserRole> UserRoles { get; set; } // Remove later, redundant 
+        public DbSet<UserFlashCardOptions> UserFlashCardOptions { get; set; }
+        public DbSet<Role> Roles { get; set; } // Remove later, redundant
         public DbSet<Vocab> Vocabs { get; set; }
         public DbSet<VocabProgress> VocabProgresses { get; set; }
 
 
-        public ApplicationDbContext(DbContextOptions options,
-            IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
+        public ApplicationDbContext(DbContextOptions options) : base(options)
         {
         }
 

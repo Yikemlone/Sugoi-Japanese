@@ -1,32 +1,28 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
-@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@inject NavigationManager navigationManager
+@inject IdentityAuthenticationStateProvider authStateProvider
 
-@inject NavigationManager Navigation
-@inject SignOutSessionStateManager SignOutManager
-
-<AuthorizeView>
-    <Authorized>
-
-        <MudStack Row="true" Spacing="2">
-            <MudButton Href="authentication/profile">Hello, @context.User.Identity?.Name!</MudButton>
-            <MudButton OnClick="BeginSignOut">Log out</MudButton>
-        </MudStack>
-
-    </Authorized>
-    <NotAuthorized>
-
-        <MudStack Row="true" Spacing="2">
-            <MudButton Href="authentication/register">Register</MudButton>
-            <MudButton Href="authentication/login">Log in</MudButton>
-        </MudStack>
-
-    </NotAuthorized>
+<AuthorizeView Policy="IsCustomer">
+    <MudButton Href="/profile">Profile</MudButton>
 </AuthorizeView>
 
-@code{
+<AuthorizeView>
+
+    <Authorized>
+        <MudButton @onclick="BeginSignOut">Log out</MudButton>
+    </Authorized>
+
+    <NotAuthorized>
+        <MudButton Href="/login">Log in</MudButton>
+        <MudButton Href="/register">Register</MudButton>
+    </NotAuthorized>
+
+</AuthorizeView>
+
+@code {
     private async Task BeginSignOut(MouseEventArgs args)
     {
-        await SignOutManager.SetSignOutState();
-        Navigation.NavigateTo("authentication/logout");
+        await authStateProvider.Logout();
+        navigationManager.NavigateTo("/");
     }
 }

@@ -1,5 +1,10 @@
-﻿<h3>FlashCard</h3>
+﻿@inherits ComponentBase
+
+<MudPaper Elevation="1">
+    <MudText Typo="Typo.body1">@Vocab.VocabMeaning</MudText>
+</MudPaper>
+
 
 @code {
-
+    [Parameter] public Vocab Vocab { get; set; }
 }

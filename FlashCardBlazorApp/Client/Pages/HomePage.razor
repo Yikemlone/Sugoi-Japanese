@@ -1,5 +1,35 @@
-﻿<h3>Home</h3>
+﻿@page "/home"
+@inject NavigationManager NavManager
+
+<PageTitle>Home</PageTitle>
+
+<MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
+    <MudGrid>
+
+        <MudItem sm="6">
+            <InspiringQuotes/>
+            <MudButton>Today's words</MudButton>
+        </MudItem>
+
+        <MudItem sm="6">
+            Stats diplayed with options
+            <UserFlashCardOptions/>
+        </MudItem>
+
+        <MudItem sm="12">
+            <ReviewableCards/>
+        </MudItem>
+
+        <MudItem sm="6">Chart image</MudItem>
+        <MudItem sm="6">Chart button and quote</MudItem>
+
+    </MudGrid>
+</MudContainer>
+
+
 
 @code {
+    
 
+    // 2 Callbacks to inform of button being pressed, then chaging page
 }
