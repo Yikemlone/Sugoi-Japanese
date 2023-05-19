@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FlashCardBlazorApp.Server.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = "IsAdmin")]
     [ApiController]
     [Route("/api/[controller]")]
     public class VocabController

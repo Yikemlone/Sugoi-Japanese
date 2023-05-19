@@ -11,8 +11,5 @@ namespace FlashCardBlazorApp.Models.Models
 
         public int VocabID { get; set; }
         public Vocab Vocab { get; set; }
-
-        public int UserID { get; set; }
-        public User User { get; set; }
     }
 }

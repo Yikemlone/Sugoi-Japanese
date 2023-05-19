@@ -2,18 +2,13 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using System.Reflection.Metadata;
 using System.Text.RegularExpressions;
 
 namespace FlashCardBlazorApp.DataAccess.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
-        public DbSet<User> Users { get; set; }
-        public DbSet<UserRole> UserRoles { get; set; } // Remove later, redundant 
         public DbSet<UserFlashCardOptions> UserFlashCardOptions { get; set; }
-        public DbSet<Role> Roles { get; set; } // Remove later, redundant
         public DbSet<Vocab> Vocabs { get; set; }
         public DbSet<VocabProgress> VocabProgresses { get; set; }
 
@@ -27,7 +22,6 @@ namespace FlashCardBlazorApp.DataAccess.Data
             base.OnModelCreating(modelBuilder);
 
             List<Vocab> vocabs = new List<Vocab>();
-            List<Role> roles = new List<Role>();
 
             var dir = new DirectoryInfo(Environment.CurrentDirectory).Parent.FullName;
             var csvLines = System.IO.File.ReadAllLines(dir + @"\Shared\japanese.csv");
@@ -61,6 +55,9 @@ namespace FlashCardBlazorApp.DataAccess.Data
             }
 
             modelBuilder.Entity<Vocab>().HasData(vocabs);
+
+            modelBuilder.Entity<ApplicationUser>().Navigation(e => e.UserFlashCardOptions).AutoInclude();
+            modelBuilder.Entity<ApplicationUser>().Navigation(e => e.VocabProgresses).AutoInclude();
         }
 
     }

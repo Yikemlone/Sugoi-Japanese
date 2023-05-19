@@ -1,10 +1,104 @@
 ﻿@inherits ComponentBase
+@*
+<style>
+    .flip-card-container {
+/*        --hue: 150;
+        --primary: hsl(var(--hue), 50%, 50%);
+        --white-1: hsl(0, 0%, 90%);
+        --white-2: hsl(0, 0%, 80%);
+        --dark: hsl(var(--hue), 25%, 10%);
+        --grey: hsl(0, 0%, 50%);
+*/
+        width: 310px;
+        height: 500px;
+    }
 
+
+    .flip-card {
+        width: 100%;
+        height: 100%;
+
+        position: relative;
+  
+        /*transition: .6s .1s;*/
+        transition: transform 1500ms;
+        transform-style: preserve-3d;
+        -webkit-transform-style: preserve-3d;
+    }
+
+    .card-front,
+    .card-back {
+        width: 100%;
+        height: 100%;
+        border-radius: 24px;
+
+   /*     background: var(--dark);*/
+        position: absolute;
+
+        /*overflow: hidden;*/
+
+        backface-visibility: hidden;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .card-front {
+        
+    }
+
+    .card-back {
+        transform: rotateY(180deg);
+    }
+
+    .flipped {
+        transform: rotateY(180deg);
+    }
+
+</style>
+
+
+<div class="flip-card-container @flipCss" @onclick="FlipMe">
+    <div class="flip-card">
+
+        <div class="card-front">
+            <p>Front</p>
+        </div>
+
+        <div class="card-back"
+            <p>Back BACK BACK BACK</p>
+        </div>
+
+    </div>
+</div>
+*@
 <MudPaper Elevation="1">
-    <MudText Typo="Typo.body1">@Vocab.VocabMeaning</MudText>
+    @Vocab.JLPT
+    @Vocab.VocabPos
+
+    @if (!flipped) 
+    {
+        @Vocab.VocabKana
+        @Vocab.SentenceKana
+    } 
+    else 
+    {
+        @Vocab.VocabMeaning
+        @Vocab.VocabExpression
+    }
+
+    <MudButton OnClick="Flip">Flip</MudButton>
 </MudPaper>
 
 
+
+
 @code {
+    private bool flipped;
+    private async Task Flip() => flipped = !flipped;
+
+
     [Parameter] public Vocab Vocab { get; set; }
 }
+

@@ -1,5 +1,10 @@
 ﻿@page "/home"
+@using System.Security.Claims
 @inject NavigationManager NavManager
+@inject AuthenticationStateProvider AuthProvider
+@inject HttpClient Http
+@attribute [Authorize(Policy = "IsCustomer")]
+
 
 <PageTitle>Home</PageTitle>
 
@@ -7,21 +12,25 @@
     <MudGrid>
 
         <MudItem sm="6">
-            <InspiringQuotes/>
+            @*<InspiringQuotes/>*@
             <MudButton>Today's words</MudButton>
         </MudItem>
 
         <MudItem sm="6">
             Stats diplayed with options
-            <UserFlashCardOptions/>
         </MudItem>
 
         <MudItem sm="12">
-            <ReviewableCards/>
-        </MudItem>
+            <ReviewableCards/>  
+      </MudItem>
 
         <MudItem sm="6">Chart image</MudItem>
         <MudItem sm="6">Chart button and quote</MudItem>
+
+        
+        @*ADD HERE FOR LOOP WITH OPTIONS *@
+
+        <FlashCard Vocab="new Vocab()"/>
 
     </MudGrid>
 </MudContainer>
@@ -29,7 +38,20 @@
 
 
 @code {
-    
+    private const string API_URL = "api/customer";
 
+    private UserFlashCardOptions? _userOptions;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var user = (await AuthProvider.GetAuthenticationStateAsync()).User.Identity;
+
+        if (user != null & user.IsAuthenticated) 
+        {
+            _userOptions = await Http.GetFromJsonAsync<UserFlashCardOptions>(API_URL + "/get-options");
+            //Console.WriteLine(_userOptions);
+        }
+    }
     // 2 Callbacks to inform of button being pressed, then chaging page
 }

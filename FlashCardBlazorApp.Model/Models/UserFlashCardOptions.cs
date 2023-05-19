@@ -7,15 +7,14 @@ namespace FlashCardBlazorApp.Models.Models
         [Key]
         public int ID { get; set; }
 
-        public int? UserID { get; set; }
-        public User? User { get; set; }
+        public int WordsPerSession { get; set; } = 10;
+        public string VocabPosFilter { get; set; } = "All";
+        public string JLPT { get; set; } = "All";
+        public bool Kanji { get; set; } = true;
+        public bool Furigana { get; set; } = true;
+        public bool Kana { get; set; } = true;
 
-        public int WordsPerSession { get; set; }
-        public string VocabPosFilter { get; set; } = string.Empty;
-        public string JLPT { get; set; } = string.Empty;
-        public bool Kanji { get; set; } 
-        public bool Furigana { get; set; }
-        public bool Kana { get; set; }
+        List<ApplicationUser> ApplicationUsers { get; set; }
 
     }
 }

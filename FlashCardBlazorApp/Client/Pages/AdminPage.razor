@@ -1,6 +1,10 @@
 ﻿@page "/admin"
-@attribute [Authorize]
+@attribute [Authorize(Policy = "IsAdmin")]
 
 <h3>Admin Page</h3>
 
 <VocabTable></VocabTable>
+
+@code {
+    
+}

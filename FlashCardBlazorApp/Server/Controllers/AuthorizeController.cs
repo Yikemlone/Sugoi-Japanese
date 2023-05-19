@@ -86,6 +86,7 @@ namespace FlashCardBlazorApp.Server.Controllers
             {
                 IsAuthenticated = User.Identity.IsAuthenticated,
                 UserName = User.Identity.Name,
+                UserID = User.FindFirstValue(ClaimTypes.NameIdentifier),
                 ExposedClaims = User.Claims
                     //Optionally: filter the claims you want to expose to the client
                     //.Where(c => c.Type == "test-claim")

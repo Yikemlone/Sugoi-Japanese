@@ -3,6 +3,12 @@
 <PageTitle>Blaze Cinema</PageTitle>
 
 <MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
-    Hello
+
+    <AuthorizeView Policy="IsCustomer">
+        <RedirectHome/>
+    </AuthorizeView>
+
+
+    <ChangeUserFlashCardOptions/>
 
 </MudContainer>
