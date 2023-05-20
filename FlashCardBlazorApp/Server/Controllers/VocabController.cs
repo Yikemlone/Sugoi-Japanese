@@ -24,6 +24,7 @@ namespace FlashCardBlazorApp.Server.Controllers
             return _unitOfWork.VocabRepository.GetAll().ToList();
         }
 
+
         [HttpPost]
         [Route("create")]
         public async Task AddVocab([FromBody] Vocab vocab)

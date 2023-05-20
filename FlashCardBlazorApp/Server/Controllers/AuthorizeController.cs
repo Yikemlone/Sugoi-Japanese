@@ -49,11 +49,8 @@ namespace FlashCardBlazorApp.Server.Controllers
 
             if (!result.Succeeded ) return BadRequest(result.Errors.FirstOrDefault()?.Description);
 
-            //var adminClaim = new Claim("AdminRole", "admin");
             var customerClaim = new Claim("CustomerRole", "customer");
-
             var custSucc = await _userManager.AddClaimAsync(user, customerClaim);
-            //var claimsSucc = await _userManager.AddClaimAsync(user, adminClaim);
 
             if (!custSucc.Succeeded) return BadRequest(result.Errors.FirstOrDefault()?.Description);
 
@@ -75,7 +72,6 @@ namespace FlashCardBlazorApp.Server.Controllers
         [HttpGet]
         public UserInfo UserInfo()
         {
-            //var user = await _userManager.GetUserAsync(HttpContext.User);
             return BuildUserInfo();
         }
 
@@ -86,10 +82,7 @@ namespace FlashCardBlazorApp.Server.Controllers
             {
                 IsAuthenticated = User.Identity.IsAuthenticated,
                 UserName = User.Identity.Name,
-                UserID = User.FindFirstValue(ClaimTypes.NameIdentifier),
                 ExposedClaims = User.Claims
-                    //Optionally: filter the claims you want to expose to the client
-                    //.Where(c => c.Type == "test-claim")
                     .ToDictionary(c => c.Type, c => c.Value)
             };
         }

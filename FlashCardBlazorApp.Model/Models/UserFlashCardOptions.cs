@@ -14,7 +14,8 @@ namespace FlashCardBlazorApp.Models.Models
         public bool Furigana { get; set; } = true;
         public bool Kana { get; set; } = true;
 
-        List<ApplicationUser> ApplicationUsers { get; set; }
+        public Guid ApplicationUserId { get; set; }
+        public ApplicationUser? ApplicationUser { get; set; }
 
     }
 }

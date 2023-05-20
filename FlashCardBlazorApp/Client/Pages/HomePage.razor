@@ -5,36 +5,48 @@
 @inject HttpClient Http
 @attribute [Authorize(Policy = "IsCustomer")]
 
-
 <PageTitle>Home</PageTitle>
 
-<MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
-    <MudGrid>
+@if (_userOptions != null)
+{
+    <MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
+        <MudGrid>
 
-        <MudItem sm="6">
-            @*<InspiringQuotes/>*@
-            <MudButton>Today's words</MudButton>
-        </MudItem>
+            <MudItem sm="6">
+                <div class="relative" style="width:100%; height:100%">
 
-        <MudItem sm="6">
-            Stats diplayed with options
-        </MudItem>
+                    <div class="absolute" style="width:inherit; height:inherit">
+                        <img style="border-radius: 10px; width:inherit; height:inherit" Src="https://generatorfun.com/code/uploads/Random-Japanese-image-10.jpg" />          
+                    </div>
 
-        <MudItem sm="12">
-            <ReviewableCards/>  
-      </MudItem>
+                    <div class="absolute pa-5 mt-10" style="width:inherit; height:inherit">
+                        <InspiringQuotes/>
+                        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Href="/flashcards" Class="mt-5">Today's words</MudButton>
+                    </div>
 
-        <MudItem sm="6">Chart image</MudItem>
-        <MudItem sm="6">Chart button and quote</MudItem>
+                </div>
+            </MudItem>
 
+            <MudItem sm="6">
+                <MudPaper Class="pa-5">
+                    <DisplayUserOptions UserFlashCardOptions="_userOptions"/>
+                </MudPaper>
+            </MudItem>
+
+            <MudItem sm="12">
+                <ReviewableCards/>  
+            </MudItem>
+
+            <MudItem sm="6">Chart image</MudItem>
+            <MudItem sm="6">Chart button and quote</MudItem>
         
-        @*ADD HERE FOR LOOP WITH OPTIONS *@
-
-        <FlashCard Vocab="new Vocab()"/>
-
-    </MudGrid>
-</MudContainer>
-
+        </MudGrid>
+    </MudContainer>
+} 
+else 
+{
+    <MudProgressLinear Indeterminate=true></MudProgressLinear>
+}
 
 
 @code {
@@ -50,8 +62,6 @@
         if (user != null & user.IsAuthenticated) 
         {
             _userOptions = await Http.GetFromJsonAsync<UserFlashCardOptions>(API_URL + "/get-options");
-            //Console.WriteLine(_userOptions);
         }
     }
-    // 2 Callbacks to inform of button being pressed, then chaging page
 }

@@ -1,22 +1,18 @@
 ﻿@inject HttpClient Http
 
-<MudPaper Elevation="1">
-    @if (_quote.Length > 0)
-    {
-        <MudText Typo="Typo.body1">@_quote</MudText>
-    }
-</MudPaper>
-
+@if (_quote.Length > 0)
+{
+    <MudText Typo="Typo.h3">@_quote</MudText>
+}
 
 @code {
-    const string QUOTE_API_LINK = "https://zenquotes.io/api/quotes/";
-    private string _quote;
+    //const string QUOTE_API_LINK = "https://zenquotes.io/api/quotes/";
+    private string _quote = "“There's no next time. It's now or never.”";
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-
-        _quote = await Http.GetAsync(QUOTE_API_LINK).Result.Content.ReadAsStringAsync();
-
+        //_quote = await Http.GetAsync(QUOTE_API_LINK).Result.Content.ReadAsStringAsync();
     }
 }
+    

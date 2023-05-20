@@ -1,0 +1,47 @@
+﻿@inherits ComponentBase 
+@inject HttpClient Http
+
+<MudForm>
+    <MudText Typo="Typo.h6">User Options</MudText>
+
+    <MudTextField T="int" Label="Words Per Session" Variant="Variant.Filled" Required RequiredError="You must enter a word qty." @bind-Value=UserFlashCardOptions.WordsPerSession></MudTextField>
+
+    <MudStack Row=true>
+        <MudSelect Label="JLPT Filter" @bind-Value="UserFlashCardOptions.JLPT" Variant="Variant.Filled" Required RequiredError="You must select a JLPT Rating.">
+            <MudSelectItem Value="@("All")">All</MudSelectItem>
+            <MudSelectItem Value="@("JLPT1")">JLPT1</MudSelectItem>
+            <MudSelectItem Value="@("JLPT2")">JLPT2</MudSelectItem>
+            <MudSelectItem Value="@("JLPT3")">JLPT3</MudSelectItem>
+            <MudSelectItem Value="@("JLPT4")">JLPT4</MudSelectItem>
+            <MudSelectItem Value="@("JLPT5")">JLPT5</MudSelectItem>
+        </MudSelect>
+
+        <MudSelect Label="Vocab Type" @bind-Value="UserFlashCardOptions.VocabPosFilter" Variant="Variant.Filled" Required RequiredError="You must select an Vocab Type.">
+            <MudSelectItem Value="@("All")">All</MudSelectItem>
+            <MudSelectItem Value="@("Verb")">Verb</MudSelectItem>
+            <MudSelectItem Value="@("Noun")">Noun</MudSelectItem>
+            <MudSelectItem Value="@("Adjective")">Adjective</MudSelectItem>
+            <MudSelectItem Value="@("Adverb")">Adverb</MudSelectItem>
+        </MudSelect>
+    </MudStack>
+
+    <MudStack Row="true" AlignItems="AlignItems.Center">
+        <MudCheckBox @bind-Checked=UserFlashCardOptions.Kanji>Kanji</MudCheckBox>
+        <MudCheckBox @bind-Checked=UserFlashCardOptions.Furigana>Furigana</MudCheckBox>
+        <MudCheckBox @bind-Checked=UserFlashCardOptions.Kana>Kana</MudCheckBox>
+    </MudStack>
+
+    <MudStack AlignItems="AlignItems.End">
+        <MudButton OnClick="OnSubmit" Variant="Variant.Outlined" Color="Color.Secondary">Update</MudButton>
+    </MudStack>
+
+</MudForm>
+
+@code {
+    [Parameter] public UserFlashCardOptions UserFlashCardOptions { get; set; }
+
+    private async Task OnSubmit()
+    {
+        await Http.PostAsJsonAsync<UserFlashCardOptions>("api/customer/set-options", UserFlashCardOptions);
+    }
+}

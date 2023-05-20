@@ -1,6 +1,9 @@
 ﻿@inject NavigationManager navigationManager
+@inject HttpClient Http
+@inject AuthenticationStateProvider authStateProvider
 
 @code {
+
     protected override async Task OnInitializedAsync()
     {
         navigationManager.NavigateTo("/home");

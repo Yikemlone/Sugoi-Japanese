@@ -1,6 +1,7 @@
 ﻿using FlashCardBlazorApp.DataAccess.Data;
 using FlashCardBlazorApp.DataAccess.Services.RepositoryService;
 using FlashCardBlazorApp.Models.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FlashCardBlazorApp.DataAccess.Services.UserOptionsService
 {
@@ -11,6 +12,13 @@ namespace FlashCardBlazorApp.DataAccess.Services.UserOptionsService
         public UserOptionsRepository(ApplicationDbContext context) : base(context) 
         {
             _context = context;
+        }
+
+        public async Task<UserFlashCardOptions> Get(Guid userID)
+        {
+            return await _context.UserFlashCardOptions
+                .Where(uo => uo.ApplicationUserId == userID)
+                .FirstOrDefaultAsync();
         }
 
         public void Update(UserFlashCardOptions userOptions) 

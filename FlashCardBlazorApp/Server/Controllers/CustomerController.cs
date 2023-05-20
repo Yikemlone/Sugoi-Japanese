@@ -23,8 +23,8 @@ namespace FlashCardBlazorApp.Server.Controllers
         }
 
         [HttpGet]
-        [Route("get")]
-        public async Task<ActionResult<List<VocabProgress>>> GetCustomersVocabs()
+        [Route("get-progress")]
+        public async Task<ActionResult<List<VocabProgress>>> GetCustomersVocabsProgress()
         {
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
@@ -33,8 +33,8 @@ namespace FlashCardBlazorApp.Server.Controllers
         }
 
         [HttpPost]
-        [Route("update")]
-        public async Task<ActionResult> UpdateVocabs([FromBody] List<VocabProgress> vocabProgresses)
+        [Route("update-progress")]
+        public async Task<ActionResult> UpdateVocabsProgress([FromBody] List<VocabProgress> vocabProgresses)
         {
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
@@ -47,13 +47,11 @@ namespace FlashCardBlazorApp.Server.Controllers
 
         [HttpGet]
         [Route("get-options")]
-        public async Task<ActionResult<UserFlashCardOptions>> GetCustomersOptions()
+        public async Task<UserFlashCardOptions> GetCustomersOptions()
         {
-            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var userOptions = await _unitOfWork.UserOptionsRepository.Get(new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier)));
 
-            if (user == null) return NotFound();
-            return Ok(user.UserFlashCardOptions);
-            //return Ok(new UserFlashCardOptions());
+            return userOptions;
         }
 
         [HttpPost]
@@ -61,15 +59,23 @@ namespace FlashCardBlazorApp.Server.Controllers
         public async Task<ActionResult> UpdateUserOptions([FromBody] UserFlashCardOptions userFlashCardOptions)
         {
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
-
+                
             if (user == null) return NotFound();
 
-            _unitOfWork.UserOptionsRepository.Add(userFlashCardOptions);
+            _unitOfWork.UserOptionsRepository.Update(userFlashCardOptions);
             _unitOfWork.Save();
-
-            user.UserFlashCardOptions.ID = userFlashCardOptions.ID;
-
+         
             return Ok();
+        }
+
+        [HttpGet]
+        [Route("get-vocabs/{wordsPerSession}")]
+        public async Task<List<Vocab>> GetNewVocabs(int wordsPerSession)
+        {
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var vocabs = await _unitOfWork.VocabRepository.Get(wordsPerSession, user.VocabProgresses);
+
+            return vocabs;
         }
     }
 }

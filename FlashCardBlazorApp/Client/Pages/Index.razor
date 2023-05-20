@@ -1,14 +1,43 @@
 ﻿@page "/"
+@inject AuthenticationStateProvider AuthProvider
+@inject HttpClient Http
 
 <PageTitle>Blaze Cinema</PageTitle>
 
 <MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
 
     <AuthorizeView Policy="IsCustomer">
-        <RedirectHome/>
+
+        <Authorized>
+            <RedirectHome/>
+        </Authorized>
+
+        <NotAuthorized>
+            <Register/>
+        </NotAuthorized>
+
     </AuthorizeView>
 
-
-    <ChangeUserFlashCardOptions/>
+    <AuthorizeView Policy="IsAdmin">
+        <RedirectAdmin/>
+    </AuthorizeView>
 
 </MudContainer>
+
+
+@code {
+
+    private const string API_URL = "api/customer";
+
+    private UserFlashCardOptions? _userOptions;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var user = (await AuthProvider.GetAuthenticationStateAsync()).User.Identity;
+
+        if (user != null & user.IsAuthenticated)
+        {
+            _userOptions = await Http.GetFromJsonAsync<UserFlashCardOptions>(API_URL + "/get-options");
+        }
+    }
+}

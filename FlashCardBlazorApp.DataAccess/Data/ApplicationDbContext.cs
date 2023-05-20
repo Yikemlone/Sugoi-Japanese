@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using System.Text.RegularExpressions;
 
 namespace FlashCardBlazorApp.DataAccess.Data
@@ -17,11 +18,21 @@ namespace FlashCardBlazorApp.DataAccess.Data
         {
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override async void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             List<Vocab> vocabs = new List<Vocab>();
+
+            //modelBuilder.Entity<VocabProgress>()
+            //    .HasOne(vp => vp.ApplicationUser)
+            //    .WithMany(au => au.VocabProgresses)
+            //    .HasForeignKey(vp => vp.ApplicationUserId);
+
+            //modelBuilder.Entity<UserFlashCardOptions>()
+            //    .HasOne(uo => uo.ApplicationUser)
+            //    .WithOne(au => au.UserFlashCardOptions)
+            //    .HasForeignKey<UserFlashCardOptions>(uo => uo.ApplicationUserId);
 
             var dir = new DirectoryInfo(Environment.CurrentDirectory).Parent.FullName;
             var csvLines = System.IO.File.ReadAllLines(dir + @"\Shared\japanese.csv");
@@ -56,9 +67,7 @@ namespace FlashCardBlazorApp.DataAccess.Data
 
             modelBuilder.Entity<Vocab>().HasData(vocabs);
 
-            modelBuilder.Entity<ApplicationUser>().Navigation(e => e.UserFlashCardOptions).AutoInclude();
             modelBuilder.Entity<ApplicationUser>().Navigation(e => e.VocabProgresses).AutoInclude();
         }
-
     }
 }

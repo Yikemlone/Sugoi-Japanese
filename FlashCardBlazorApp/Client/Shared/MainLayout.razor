@@ -8,28 +8,17 @@
 <MudLayout>
 
     <MudAppBar Elevation="1" Color="Color.Secondary">
+        <MudText Typo="Typo.h6">Flash Card App</MudText>
+
         <MudSpacer />
         <NavMenu></NavMenu>
-    </MudAppBar>
-
-    <MudDrawer Open="true" Elevation="1">
-        <MudDrawerHeader>
-            <MudText Typo="Typo.h6">Flash Card App</MudText>
-        </MudDrawerHeader>
-
-        <NavLink class="nav-link" href="admin">
-            <MudNavLink Style="color: #ff4081ff" Href="/" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
-        </NavLink>
 
         <AuthorizeView Policy="IsAdmin"> 
             <Authorized>
-                <NavLink class="nav-link" href="admin">
-                    <MudNavLink Style="color: #ff4081ff" Href="admin" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Dashboard">Admin Dashboard</MudNavLink>
-                </NavLink>
+                <MudButton Href="/admin">Admin Dashboard</MudButton>
             </Authorized>
         </AuthorizeView>
-
-    </MudDrawer>
+    </MudAppBar>
 
     <MudMainContent>    
         <MudContainer MaxWidth="MaxWidth.Large">
