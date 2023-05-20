@@ -25,6 +25,19 @@ namespace FlashCardBlazorApp.DataAccess.Services.VocabService
                 .ToList();
 
             return randomRecords;
+
+            //var vocabIDs = vocabProgresses.Select(vp => vp.VocabID).ToList();
+            //var pageSize = 50;
+
+            //var randomRecords = new List<Vocab>();
+
+            //var chunk = _context.Vocabs
+            //    .Take(pageSize)
+            //    .Where(x => !vocabIDs.Contains(x.ID))
+            //    .OrderBy(x => Guid.NewGuid())
+            //    .ToList();
+
+            //return randomRecords;
         }
 
         public void Update(Vocab vocab) 

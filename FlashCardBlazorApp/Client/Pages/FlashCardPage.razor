@@ -7,20 +7,9 @@
 
 @if (vocabs.Count > 0) 
 {
-    <MudContainer>
-        <div class="relative">
-
-            <div class="absolute">
-                <FlashCard Vocab="@vocabs[_index]"/>
-            </div>
-
-            <div class="absolute">
-                <MudFab StartIcon="@Icons.Material.Filled.ArrowLeft" Color="Color.Secondary"></MudFab>
-                <MudFab StartIcon="@Icons.Material.Filled.ArrowRight" Color="Color.Secondary"></MudFab>
-            </div>
-
-        </div>
-    </MudContainer>
+    <MudStack Class="pa-3 mt-12" AlignItems="AlignItems.Center">
+        <FlashCard Vocab="@vocabs[_index]"/>
+    </MudStack>
 } 
 else 
 {

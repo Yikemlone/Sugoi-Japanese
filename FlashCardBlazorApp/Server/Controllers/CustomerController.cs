@@ -47,11 +47,12 @@ namespace FlashCardBlazorApp.Server.Controllers
 
         [HttpGet]
         [Route("get-options")]
-        public async Task<UserFlashCardOptions> GetCustomersOptions()
+        public async Task<ActionResult<UserFlashCardOptions>> GetCustomersOptions()
         {
             var userOptions = await _unitOfWork.UserOptionsRepository.Get(new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier)));
 
-            return userOptions;
+            if (userOptions == null) return NotFound();
+            return Ok(userOptions);
         }
 
         [HttpPost]
@@ -70,12 +71,13 @@ namespace FlashCardBlazorApp.Server.Controllers
 
         [HttpGet]
         [Route("get-vocabs/{wordsPerSession}")]
-        public async Task<List<Vocab>> GetNewVocabs(int wordsPerSession)
+        public async Task<ActionResult<List<Vocab>>> GetNewVocabs(int wordsPerSession)
         {
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
             var vocabs = await _unitOfWork.VocabRepository.Get(wordsPerSession, user.VocabProgresses);
 
-            return vocabs;
+            if (vocabs == null) return NotFound();
+            return Ok(vocabs);
         }
     }
 }

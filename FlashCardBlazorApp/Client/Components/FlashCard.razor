@@ -1,51 +1,34 @@
 ﻿@inherits ComponentBase
-@*
+
 <style>
-    .flip-card-container {
-/*        --hue: 150;
-        --primary: hsl(var(--hue), 50%, 50%);
-        --white-1: hsl(0, 0%, 90%);
-        --white-2: hsl(0, 0%, 80%);
-        --dark: hsl(var(--hue), 25%, 10%);
-        --grey: hsl(0, 0%, 50%);
-*/
+    .card-container {
         width: 310px;
         height: 500px;
     }
 
-
-    .flip-card {
+    .card {
         width: 100%;
         height: 100%;
 
         position: relative;
-  
-        /*transition: .6s .1s;*/
+
+        background-color: #0b423f;
+
         transition: transform 1500ms;
         transform-style: preserve-3d;
-        -webkit-transform-style: preserve-3d;
     }
 
-    .card-front,
-    .card-back {
+    .card-content {
         width: 100%;
         height: 100%;
         border-radius: 24px;
 
-   /*     background: var(--dark);*/
         position: absolute;
-
-        /*overflow: hidden;*/
-
-        backface-visibility: hidden;
+        overflow: hidden;
 
         display: flex;
         justify-content: center;
         align-items: center;
-    }
-
-    .card-front {
-        
     }
 
     .card-back {
@@ -56,41 +39,46 @@
         transform: rotateY(180deg);
     }
 
+    .fab-buttons{
+        width: 100%;
+        height: 0%;
+        
+        justify-content: space-between;
+        display: flex;
+        align-items: center;
+    }
+
 </style>
 
 
-<div class="flip-card-container @flipCss" @onclick="FlipMe">
-    <div class="flip-card">
 
-        <div class="card-front">
-            <p>Front</p>
-        </div>
+<div class="card-container">
+    <div class="card  @(flipped ? "flipped" :"")">
 
-        <div class="card-back"
-            <p>Back BACK BACK BACK</p>
+        <div class="card-content @(flipped ? "card-back" :"")">
+            @Vocab.JLPT
+            @Vocab.VocabPos
+
+            @if (!flipped)
+            {
+                @Vocab.VocabKana
+                @Vocab.SentenceKana
+            }
+            else
+            {
+                @Vocab.VocabMeaning
+                @Vocab.VocabExpression
+            }
+            <MudButton OnClick="Flip">Flip</MudButton>
         </div>
 
     </div>
+
+    <div class="fab-buttons">
+        <MudFab OnClick="LeftClick" StartIcon="@Icons.Material.Filled.ArrowLeft" Color="Color.Secondary"></MudFab>
+        <MudFab OnClick="RightClick" StartIcon="@Icons.Material.Filled.ArrowRight" Color="Color.Secondary"></MudFab>
+    </div>
 </div>
-*@
-<MudPaper Elevation="1">
-    @Vocab.JLPT
-    @Vocab.VocabPos
-
-    @if (!flipped) 
-    {
-        @Vocab.VocabKana
-        @Vocab.SentenceKana
-    } 
-    else 
-    {
-        @Vocab.VocabMeaning
-        @Vocab.VocabExpression
-    }
-
-    <MudButton OnClick="Flip">Flip</MudButton>
-</MudPaper>
-
 
 
 
@@ -98,7 +86,16 @@
     private bool flipped;
     private async Task Flip() => flipped = !flipped;
 
-
     [Parameter] public Vocab Vocab { get; set; }
+
+    private async void RightClick() 
+    {
+        Console.WriteLine("Right");
+    }
+
+    private async void LeftClick() 
+    { 
+        Console.WriteLine("Left");
+    }
 }
 

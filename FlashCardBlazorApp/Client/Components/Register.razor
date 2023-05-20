@@ -2,23 +2,34 @@
 @inherits ComponentBase
 @inject IdentityAuthenticationStateProvider authStateProvider
 
+<MudContainer MaxWidth="MaxWidth.Large">
+    <EditForm Model="@_model" OnValidSubmit="OnSubmit">
 
-<EditForm Model="@_model" OnValidSubmit="OnSubmit">
+        <DataAnnotationsValidator />
+        <MudCard Class="ma-16 pl-16 pr-16">
 
-    <DataAnnotationsValidator />
+            <MudCardContent>
+                <div class="ma-13 pl-16 pr-16">
+                    <MudTextField Label="Username" Variant="Variant.Filled" @bind-Value="_model.UserName" 
+                    Required RequiredError="You must enter a username" For="@(() => _model.UserName)" />
 
-    <MudTextField Label="Username" Variant="Variant.Filled" @bind-Value="_model.UserName" Required RequiredError="You must enter a username" For="@(() => _model.UserName)" />
-    <MudTextField InputType="InputType.Password" Variant="Variant.Filled" Label="Password" Class="mt-3" @bind-Value="_model.Password" 
-        Required RequiredError="You must enter a password" For="@(() => _model.Password)" />
-    <MudTextField InputType="InputType.Password" Variant="Variant.Filled" Label="Confirm Password" Class="mt-3" @bind-Value="_model.PasswordConfirm" 
-        Required RequiredError="Confirm your password" For="@(() => _model.PasswordConfirm)" />
+                    <MudTextField InputType="InputType.Password" Variant="Variant.Filled" Label="Password" Class="mt-3" @bind-Value="_model.Password" 
+                        Required RequiredError="You must enter a password" For="@(() => _model.Password)" />
 
-    <MudStack Row="true" Spacing="6" Justify="Justify.Center">
-        <MudText Typo="Typo.subtitle1" style="color: red">@_error</MudText>
-        <MudButton Variant="Variant.Filled" OnClick="OnSubmit" Color="Color.Secondary">Register</MudButton>
-    </MudStack>
+                    <MudTextField InputType="InputType.Password" Variant="Variant.Filled" Label="Confirm Password" Class="mt-3" @bind-Value="_model.PasswordConfirm" 
+                        Required RequiredError="Confirm your password" For="@(() => _model.PasswordConfirm)" />
+                </div>
 
-</EditForm>
+                <MudStack Row="true" Spacing="6" Justify="Justify.Center">
+                    <MudText Typo="Typo.subtitle1" style="color: red">@_error</MudText>
+                    <MudButton Variant="Variant.Filled" OnClick="OnSubmit" Color="Color.Secondary">Register</MudButton>
+                </MudStack>
+
+            </MudCardContent>
+
+         </MudCard>
+    </EditForm>
+</MudContainer>
 
 @code {
     private RegisterParameters _model = new();

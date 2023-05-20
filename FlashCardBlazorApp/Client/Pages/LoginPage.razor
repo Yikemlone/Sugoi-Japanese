@@ -5,26 +5,26 @@
 
 <PageTitle>Login</PageTitle>
 
-<MudContainer MaxWidth="MaxWidth.Medium">
+<MudContainer MaxWidth="MaxWidth.Large">
     <EditForm Model="@_model" OnValidSubmit="OnSubmit">
         <DataAnnotationsValidator />
-            <MudCard Class="ma-16">
+            <MudCard Class="ma-16 pl-16 pr-16">
+
                 <MudCardContent>
-                    <div class="ma-13">
+                    <div class="ma-13 pl-16 pr-16">
                         <MudTextField Label="Username" @bind-Value="_model.UserName" For="@(() => _model.UserName)" />
                         <MudTextField InputType="InputType.Password" Label="Password" Class="mt-3" @bind-Value="_model.Password" For="@(() => _model.Password)" />
+                        <MudCheckBox @bind-Value="@_model.RememberMe" T="bool" Label="Remember Me" />
                     </div>
-                    <MudCheckBox @bind-Value="@_model.RememberMe" T="bool" Label="Remember Me" />
+
+                    <MudStack Row="true" Spacing="6" Justify="Justify.Center">
+                        <MudText Typo="Typo.subtitle1" style="color: red">@_error</MudText>
+                        <MudButton Variant="Variant.Filled" OnClick="OnSubmit" Color="Color.Secondary">Sign in</MudButton>
+                        <MudButton  Href="/" Variant="Variant.Filled" Color="Color.Primary">Create Account</MudButton>
+
+                    </MudStack>
+
                 </MudCardContent>
-
-                <MudStack Row="true" Spacing="6" Justify="Justify.Center">
-                    <MudText Typo="Typo.subtitle1" style="color: red">@_error</MudText>
-                </MudStack>
-
-                <MudStack Row="true" Spacing="6" Justify="Justify.Center" >
-                    <MudButton Class="mb-6" ButtonType="ButtonType.Submit" Variant="Variant.Outlined" Color="Color.Primary">Sign in</MudButton>
-                    <MudButton Class="mb-6" Href="/register" Variant="Variant.Outlined" Color="Color.Secondary">Create account</MudButton>
-                </MudStack>
 
             </MudCard>
     </EditForm>

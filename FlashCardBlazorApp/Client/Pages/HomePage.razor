@@ -12,8 +12,14 @@
     <MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
         <MudGrid>
 
+            <AuthorizeView>
+                <MudItem sm="12">
+                    <MudText Typo="Typo.h3">Hello @context.User.Identity.Name!</MudText>
+                </MudItem>
+            </AuthorizeView>
+
             <MudItem sm="6">
-                <div class="relative" style="width:100%; height:100%">
+                <div class="relative mb-16" style="width:100%; height:100%">
 
                     <div class="absolute" style="width:inherit; height:inherit">
                         <img style="border-radius: 10px; width:inherit; height:inherit" Src="https://generatorfun.com/code/uploads/Random-Japanese-image-10.jpg" />          
@@ -21,7 +27,9 @@
 
                     <div class="absolute pa-5 mt-10" style="width:inherit; height:inherit">
                         <InspiringQuotes/>
-                        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Href="/flashcards" Class="mt-5">Today's words</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Href="/flashcards" Class="mt-5 mb-16">
+                            <MudText Color="Color.Primary" Typo="Typo.h6" >Today's Words</MudText>
+                        </MudButton>
                     </div>
 
                 </div>
