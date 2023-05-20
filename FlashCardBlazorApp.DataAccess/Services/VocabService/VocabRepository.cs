@@ -17,21 +17,14 @@ namespace FlashCardBlazorApp.DataAccess.Services.VocabService
         public async Task<List<Vocab>> Get(int wordsPerSession, List<VocabProgress> vocabProgresses)
         {
             var vocabIDs = vocabProgresses.Select(vp => vp.VocabID).ToList();
-            var vocabs = new List<Vocab>();
 
-            while (vocabs.Count < wordsPerSession)
-            {
-                var batchVocabs = await _context.Vocabs
-                    .Where(v => !vocabIDs.Contains(v.ID) && !vocabs.Select(vc => vc.ID).Contains(v.ID))
-                    .OrderBy(t => Guid.NewGuid())
-                    .Take(wordsPerSession - vocabs.Count)
-                    .ToListAsync();
+            var randomRecords = _context.Vocabs
+                .Where(x => !vocabIDs.Contains(x.ID))
+                .OrderBy(x => Guid.NewGuid())
+                .Take(wordsPerSession)
+                .ToList();
 
-                vocabIDs.AddRange(batchVocabs.Select(bv => bv.ID));
-                vocabs.AddRange(batchVocabs);
-            }
-
-            return vocabs;
+            return randomRecords;
         }
 
         public void Update(Vocab vocab) 
