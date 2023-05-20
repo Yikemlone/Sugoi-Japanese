@@ -23,21 +23,3 @@
     </AuthorizeView>
 
 </MudContainer>
-
-
-@code {
-
-    private const string API_URL = "api/customer";
-
-    private UserFlashCardOptions? _userOptions;
-
-    protected override async Task OnInitializedAsync()
-    {
-        var user = (await AuthProvider.GetAuthenticationStateAsync()).User.Identity;
-
-        if (user != null & user.IsAuthenticated)
-        {
-            _userOptions = await Http.GetFromJsonAsync<UserFlashCardOptions>(API_URL + "/get-options");
-        }
-    }
-}

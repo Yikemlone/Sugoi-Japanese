@@ -7,17 +7,9 @@
 
 <MudLayout>
 
-    <MudAppBar Elevation="1" Color="Color.Primary">
-        <MudText Typo="Typo.h6">Flash Card App</MudText>
-
+    <MudAppBar Elevation="1" Color="Color.Tertiary">
         <MudSpacer />
-        <NavMenu/>
-
-        <AuthorizeView Policy="IsAdmin"> 
-            <Authorized>
-                <MudButton Href="/admin">Admin Dashboard</MudButton>
-            </Authorized>
-        </AuthorizeView>
+        <MudText Typo="Typo.body2">SUGOI JAPANESE</MudText>
     </MudAppBar>
 
     <MudMainContent>    
@@ -35,9 +27,10 @@
             {
                 // These ones I know I want
                 Background = "#072c2a",
-                Primary = "#0b423f",
+                Primary = "#ff4081ff",
                 Secondary = "#4be2da",
                 Surface = "#0b423f",
+                Tertiary = "#0b423f",
                 Dark = Colors.Grey.Darken1,
                 AppbarText = "#ffffff",
                 TextPrimary = "#ffffff",

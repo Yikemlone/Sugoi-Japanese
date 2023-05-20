@@ -19,112 +19,123 @@
 
 </style>
 
-<MudGrid>
-    <MudTable 
-        Items="@_vocabs" 
-        T="Vocab" 
-        Breakpoint="Breakpoint.Sm" 
-        Style="width: 100%"
-        @ref="_mudTable" 
-        @bind-SelectedItem="_selected"
-        RowClassFunc="@SelectedRowClassFunc" 
-        OnRowClick="RowClickEvent" 
-        Loading="@(_vocabs == null ? true : false)"
-        LoadingProgressColor="Color.Secondary"
-        Hover="true" 
-        Dense="true"
-        Bordered="true"
-        FixedHeader="true"
-        HorizontalScrollbar="true"
-        ServerData="ServerReload">
+@if (_vocabs != null)
+{
+    <MudGrid>
+        <MudTable 
+            Items="@_vocabs" 
+            T="Vocab" 
+            Breakpoint="Breakpoint.Sm" 
+            Style="width: 100%"
+            @ref="_mudTable" 
+            @bind-SelectedItem="_selected"
+            RowClassFunc="@SelectedRowClassFunc" 
+            OnRowClick="RowClickEvent" 
+            Loading="@(_vocabs == null ? true : false)"
+            LoadingProgressColor="Color.Secondary"
+            Hover="true" 
+            Dense="true"
+            Bordered="true"
+            FixedHeader="true"
+            HorizontalScrollbar="true"
+            ServerData="ServerReload">
 
-        <ToolBarContent>
-            <MudText Typo="Typo.h6">Edit Vocab</MudText>
-            <MudSpacer />
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">Edit Vocab</MudText>
+                <MudSpacer />
 
-            <MudTextField T="string" Placeholder="Search" Adornment="Adornment.Start" ValueChanged="@(s=>OnSearch(s))" 
-                AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
-            </MudTextField>
+                <MudTextField T="string" Placeholder="Search" Adornment="Adornment.Start" ValueChanged="@(s=>OnSearch(s))" 
+                    AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
+                </MudTextField>
 
-            <MudSpacer />
+                <MudSpacer />
 
-            <MudTooltip Text="Add" Placement="Placement.Top" Color="Color.Secondary">
-                <MudIconButton Icon="@Icons.Material.Outlined.Add" Color="Color.Secondary" OnClick="OpenCreateDialog" />
-            </MudTooltip>
-            <MudTooltip Text="Edit" Placement="Placement.Top" Color="Color.Secondary">
-                <MudIconButton Icon="@Icons.Material.Outlined.Edit" Color="Color.Secondary" Disabled=@_buttonDisabled OnClick="OpenUpdateDialog"/>
-            </MudTooltip>
-            <MudTooltip Text="Delete" Placement="Placement.Top" Color="Color.Secondary">
-                <MudIconButton Icon="@Icons.Material.Outlined.Delete" Color="Color.Secondary" Disabled=@_buttonDisabled OnClick="OpenDeleteDialog" />
-            </MudTooltip>
+                <MudTooltip Text="Add" Placement="Placement.Top" Color="Color.Secondary">
+                    <MudIconButton Icon="@Icons.Material.Outlined.Add" Color="Color.Secondary" OnClick="OpenCreateDialog" />
+                </MudTooltip>
+                <MudTooltip Text="Edit" Placement="Placement.Top" Color="Color.Secondary">
+                    <MudIconButton Icon="@Icons.Material.Outlined.Edit" Color="Color.Secondary" Disabled=@_buttonDisabled OnClick="OpenUpdateDialog"/>
+                </MudTooltip>
+                <MudTooltip Text="Delete" Placement="Placement.Top" Color="Color.Secondary">
+                    <MudIconButton Icon="@Icons.Material.Outlined.Delete" Color="Color.Secondary" Disabled=@_buttonDisabled OnClick="OpenDeleteDialog" />
+                </MudTooltip>
 
-        </ToolBarContent>
+            </ToolBarContent>
 
-        <HeaderContent>
-            <MudTh>
-                <MudTableSortLabel SortLabel="JLPT" T="Vocab">
-                    JLPT
-                </MudTableSortLabel>
-            </MudTh>
+            <HeaderContent>
+                <MudTh>
+                    <MudTableSortLabel SortLabel="JLPT" T="Vocab">
+                        JLPT
+                    </MudTableSortLabel>
+                </MudTh>
 
-            <MudTh>
-                <MudTableSortLabel SortLabel="VocabPos" T="Vocab">
-                    Vocab Pos
-                 </MudTableSortLabel>
-            </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortLabel="VocabPos" T="Vocab">
+                        Vocab Pos
+                     </MudTableSortLabel>
+                </MudTh>
 
-            <MudTh>Vocab Expression</MudTh>
-            <MudTh>VocabKana</MudTh>
-            <MudTh>SentenceExpression</MudTh>
-            <MudTh>SentenceKana</MudTh>
-            <MudTh>SentenceMeaning</MudTh>
-            <MudTh>VocabFurigana</MudTh>
-            <MudTh>SentenceFurigana</MudTh>
+                <MudTh>Vocab Expression</MudTh>
+                <MudTh>VocabKana</MudTh>
+                <MudTh>SentenceExpression</MudTh>
+                <MudTh>SentenceKana</MudTh>
+                <MudTh>SentenceMeaning</MudTh>
+                <MudTh>VocabFurigana</MudTh>
+                <MudTh>SentenceFurigana</MudTh>
 
-        </HeaderContent>
+            </HeaderContent>
 
-        <RowTemplate>
-            <MudTd DataLabel="JLPT" Style="width: 200px">@context.JLPT</MudTd>
-            <MudTd DataLabel="VocabPos">@context.VocabPos</MudTd>
-            <MudTd DataLabel="VocabExpression">@context.VocabExpression</MudTd>
-            <MudTd DataLabel="VocabKana">@context.VocabKana</MudTd>
-            <MudTd DataLabel="SentenceExpression">@context.SentenceExpression</MudTd>
-            <MudTd DataLabel="SentenceKana">
-                <div style="white-space: nowrap;">
-                    @context.SentenceKana
-                </div>
-            </MudTd>            
+            <RowTemplate>
+                <MudTd DataLabel="JLPT" Style="width: 200px">@context.JLPT</MudTd>
+                <MudTd DataLabel="VocabPos">@context.VocabPos</MudTd>
+                <MudTd DataLabel="VocabExpression">@context.VocabExpression</MudTd>
+                <MudTd DataLabel="VocabKana">@context.VocabKana</MudTd>
+                <MudTd DataLabel="SentenceExpression">@context.SentenceExpression</MudTd>
+                <MudTd DataLabel="SentenceKana">
+                    <div style="white-space: nowrap;">
+                        @context.SentenceKana
+                    </div>
+                </MudTd>            
             
-            <MudTd DataLabel="SentenceMeaning">
-                <div style="white-space: nowrap;">
-                    @context.SentenceMeaning
-                </div>
-            </MudTd>         
+                <MudTd DataLabel="SentenceMeaning">
+                    <div style="white-space: nowrap;">
+                        @context.SentenceMeaning
+                    </div>
+                </MudTd>         
             
-            <MudTd DataLabel="VocabFurigana">@context.VocabFurigana</MudTd>
+                <MudTd DataLabel="VocabFurigana">@context.VocabFurigana</MudTd>
             
-            <MudTd DataLabel="SentenceFurigana">
-                <div style="white-space: nowrap;">
-                    @context.SentenceFurigana
-                </div>
-            </MudTd>
+                <MudTd DataLabel="SentenceFurigana">
+                    <div style="white-space: nowrap;">
+                        @context.SentenceFurigana
+                    </div>
+                </MudTd>
 
-        </RowTemplate>
+            </RowTemplate>
 
-        <NoRecordsContent>
-            <MudText>No matching records found</MudText>
-        </NoRecordsContent>
+            <NoRecordsContent>
+                <MudText>No matching records found</MudText>
+            </NoRecordsContent>
 
-        <LoadingContent>
-            <MudText>Loading...</MudText>
-        </LoadingContent>
+            <LoadingContent>
+                <MudText>Loading...</MudText>
+            </LoadingContent>
 
-        <PagerContent>
-            <MudTablePager PageSizeOptions="@_pageSizeOptions" HorizontalAlignment="HorizontalAlignment.Center"/>
-        </PagerContent>
+            <PagerContent>
+                <MudTablePager PageSizeOptions="@_pageSizeOptions" HorizontalAlignment="HorizontalAlignment.Center"/>
+            </PagerContent>
 
-    </MudTable>
-</MudGrid>
+        </MudTable>
+    </MudGrid>
+
+} 
+else 
+{
+    <MudStack AlignItems="AlignItems.Center" Class="mt-16">
+        <MudProgressLinear Indeterminate=true/>
+    </MudStack>
+}
+
 
 @code {
     private const string API_URL = "api/vocab";

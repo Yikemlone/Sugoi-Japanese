@@ -1,6 +1,9 @@
 ﻿@page "/admin"
 @attribute [Authorize(Policy = "IsAdmin")]
 
-<h3>Admin Page</h3>
+<PageTitle>Admin</PageTitle>
 
-<VocabTable></VocabTable>
+<MudContainer MaxWidth="MaxWidth.Large" Class="mt-6">
+    <MudText Typo="Typo.h3" Class="mb-6">Admin Page</MudText>
+    <VocabTable/>       
+</MudContainer>

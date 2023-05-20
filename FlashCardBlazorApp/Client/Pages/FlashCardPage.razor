@@ -8,12 +8,15 @@
 @if (vocabs.Count > 0) 
 {
     <MudStack Class="pa-3 mt-12" AlignItems="AlignItems.Center">
-        <FlashCard Vocab="@vocabs[_index]"/>
+        <MudText Typo="Typo.h6">@(_index+1)/@vocabs.Count</MudText>
+        <FlashCard ChangeIndex="ChangeIndex" Vocab="@vocabs[_index]"/>
     </MudStack>
 } 
 else 
 {
-    <MudProgressLinear Indeterminate=true></MudProgressLinear>
+    <MudStack AlignItems="AlignItems.Center" Class="mt-16">
+        <MudProgressLinear Indeterminate=true/>
+    </MudStack>
 }
  
 
@@ -32,6 +35,20 @@ else
         {
             _userOptions = await Http.GetFromJsonAsync<UserFlashCardOptions>(API_URL + "/get-options");
             vocabs = await Http.GetFromJsonAsync<List<Vocab>>(API_URL + $"/get-vocabs/{_userOptions.WordsPerSession}");
+        }
+    }
+
+    protected async Task ChangeIndex(int number)
+    {
+        _index += number;
+
+        if (_index < 0)
+        {
+            _index = vocabs.Count - 1;
+        }
+        else if (_index > (vocabs.Count - 1)) 
+        {
+            _index = 0;
         }
     }
 }

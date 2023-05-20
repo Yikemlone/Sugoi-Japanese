@@ -9,12 +9,12 @@
 
 @if (_userOptions != null)
 {
-    <MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
+    <MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.Large">
         <MudGrid>
 
             <AuthorizeView>
                 <MudItem sm="12">
-                    <MudText Typo="Typo.h3">Hello @context.User.Identity.Name!</MudText>
+                        <MudText Typo="Typo.h3">Hello <b>@context.User.Identity.Name!</b></MudText>
                 </MudItem>
             </AuthorizeView>
 
@@ -27,8 +27,8 @@
 
                     <div class="absolute pa-5 mt-10" style="width:inherit; height:inherit">
                         <InspiringQuotes/>
-                        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Href="/flashcards" Class="mt-5 mb-16">
-                            <MudText Color="Color.Primary" Typo="Typo.h6" >Today's Words</MudText>
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" Href="/flashcards" Class="mt-5 mb-16">
+                            <MudText Color="Color.Inherit" Typo="Typo.h6">Today's Words</MudText>
                         </MudButton>
                     </div>
 
@@ -53,7 +53,9 @@
 } 
 else 
 {
-    <MudProgressLinear Indeterminate=true></MudProgressLinear>
+    <MudStack AlignItems="AlignItems.Center" Class="mt-16">
+        <MudProgressLinear Indeterminate=true/>
+    </MudStack>
 }
 
 

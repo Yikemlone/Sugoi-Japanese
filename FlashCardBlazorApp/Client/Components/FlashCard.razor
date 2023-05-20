@@ -2,8 +2,8 @@
 
 <style>
     .card-container {
-        width: 310px;
-        height: 500px;
+        width: 380px;
+        height: 650px;
     }
 
     .card {
@@ -25,10 +25,6 @@
 
         position: absolute;
         overflow: hidden;
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
     }
 
     .card-back {
@@ -50,26 +46,33 @@
 
 </style>
 
-
-
 <div class="card-container">
     <div class="card  @(flipped ? "flipped" :"")">
 
         <div class="card-content @(flipped ? "card-back" :"")">
-            @Vocab.JLPT
-            @Vocab.VocabPos
 
-            @if (!flipped)
-            {
-                @Vocab.VocabKana
-                @Vocab.SentenceKana
-            }
-            else
-            {
-                @Vocab.VocabMeaning
-                @Vocab.VocabExpression
-            }
-            <MudButton OnClick="Flip">Flip</MudButton>
+            <MudStack Class="pa-4">
+                <MudText Typo="Typo.body1">JLPT Rating: <b>@Vocab.JLPT</b></MudText>
+                <MudText Typo="Typo.body1">Vocab Type: <b>@Vocab.VocabPos</b></MudText>
+
+                @if (!flipped)
+                {
+                    <MudText Typo="Typo.body1">Expression: <b>@Vocab.VocabExpression</b></MudText>
+                    <MudText Typo="Typo.body1">Sentence Expression: @(new MarkupString(@Vocab.SentenceExpression))</MudText>
+                    <MudText Typo="Typo.body1">Sentence Kana: @(new MarkupString(@Vocab.SentenceKana))</MudText>
+                    <MudText Typo="Typo.body1">Vocab Furigana: @(new MarkupString(@Vocab.VocabFurigana))</MudText>
+                    <MudText Typo="Typo.body1">Sentence Furigana: @(new MarkupString(@Vocab.SentenceFurigana))</MudText>
+                }
+                else
+                {
+                    <MudText Typo="Typo.body1">Meaning: @Vocab.VocabMeaning</MudText>
+                    <MudText Typo="Typo.body1">Sentence Meaning:@Vocab.SentenceMeaning</MudText>
+                }
+
+                <MudButton Color="Color.Secondary" Variant="Variant.Outlined" OnClick="Flip">Flip</MudButton>
+
+            </MudStack>
+            
         </div>
 
     </div>
@@ -86,16 +89,19 @@
     private bool flipped;
     private async Task Flip() => flipped = !flipped;
 
+    [Parameter] public EventCallback<int> ChangeIndex { get; set; }
+
     [Parameter] public Vocab Vocab { get; set; }
+    [Parameter] public UserFlashCardOptions UserFlashCardOptions { get; set; }
 
     private async void RightClick() 
     {
-        Console.WriteLine("Right");
+        await ChangeIndex.InvokeAsync(1);
     }
 
-    private async void LeftClick() 
+    private async Task LeftClick()
     { 
-        Console.WriteLine("Left");
+        await ChangeIndex.InvokeAsync(-1);
     }
 }
 
