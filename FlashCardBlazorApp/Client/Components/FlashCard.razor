@@ -3,7 +3,7 @@
 <style>
     .card-container {
         width: 400px;
-        height: 550px;
+        height: 500px;
     }
 
     .card {
@@ -78,16 +78,16 @@
 
     </div>    
     
-    <div class="fab-buttons">
+    <div class="fab-buttons mt-1">
         <MudIconButton OnClick="LeftClick" Icon="@Icons.Material.Filled.ArrowLeft" Color="Color.Secondary"/>
         <MudButton Class="buttons" Color="Color.Secondary" Variant="Variant.Outlined" OnClick="Flip">Flip</MudButton>
         <MudIconButton OnClick="RightClick" Icon="@Icons.Material.Filled.ArrowRight" Color="Color.Secondary"/>
     </div>
 
-    <MudStack Row="true" Spacing="0" Justify="Justify.Center">
-        <MudButton OnClick="Bad" Color="Color.Secondary" Variant="Variant.Outlined">BAD</MudButton>
-        <MudButton OnClick="Ok" Color="Color.Secondary" Variant="Variant.Outlined">OK</MudButton>
-        <MudButton OnClick="Good" Color="Color.Secondary" Variant="Variant.Outlined">GOOD</MudButton>
+    <MudStack Row="true" Spacing="2" Justify="Justify.SpaceEvenly" Class="mt-3">
+        <MudButton OnClick="Bad" Class="buttons" Color="Color.Error" Variant="Variant.Outlined">BAD</MudButton>
+        <MudButton OnClick="Ok" Class="buttons" Color="Color.Surface" Variant="Variant.Outlined">OK</MudButton>
+        <MudButton OnClick="Good" Class="buttons" Color="Color.Success" Variant="Variant.Outlined">GOOD</MudButton>
     </MudStack>
 
 </div>

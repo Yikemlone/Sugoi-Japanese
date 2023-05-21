@@ -1,9 +1,52 @@
 ﻿@inherits ComponentBase
 
-<MudPaper Elevation="1">
-    <MudText Typo="Typo.body1">Reviewable Cards</MudText>
-</MudPaper>
+<MudStack Row=true AlignItems="AlignItems.Center" Spacing="6">
 
+    <MudCard>   
+        <MudCardContent>
+            <MudText>Bad Vocabs</MudText>
+            <MudText Typo="Typo.body2">The quick, brown fox jumps over a lazy dog.</MudText>
+        </MudCardContent>
+
+        <MudCardActions>
+            <MudButton Variant="Variant.Text" Color="Color.Primary">Review</MudButton>
+        </MudCardActions>
+    </MudCard>
+
+    <MudCard>   
+        <MudCardContent>
+            <MudText>Ok Vocabs</MudText>
+            <MudText Typo="Typo.body2">The quick, brown fox jumps over a lazy dog.</MudText>
+        </MudCardContent>
+
+        <MudCardActions>
+            <MudButton Variant="Variant.Text" Color="Color.Primary">Review</MudButton>
+        </MudCardActions>
+    </MudCard>
+
+    <MudCard>   
+        <MudCardContent>
+            <MudText>Good Vocabs</MudText>
+            <MudText Typo="Typo.body2">The quick, brown fox jumps over a lazy dog.</MudText>
+        </MudCardContent>
+
+        <MudCardActions>
+            <MudButton Variant="Variant.Text" Color="Color.Primary">Review</MudButton>
+        </MudCardActions>
+    </MudCard>
+
+    <MudCard>   
+        <MudCardContent>
+            <MudText>All Vocabs</MudText>
+            <MudText Typo="Typo.body2">The quick, brown fox jumps over a lazy dog.</MudText>
+        </MudCardContent>
+
+        <MudCardActions>
+            <MudButton Variant="Variant.Text" Color="Color.Primary">Review</MudButton>
+        </MudCardActions>
+    </MudCard>
+
+</MudStack>
 
 @code {
 

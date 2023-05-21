@@ -33,17 +33,35 @@ namespace FlashCardBlazorApp.Server.Controllers
         }
 
         [HttpPost]
-        [Route("update-progress")]
-        public async Task<ActionResult> UpdateVocabsProgress([FromBody] List<VocabProgress> vocabProgresses)
+        [Route("add-progress")]
+        public async Task<ActionResult> AddVocabsProgress([FromBody] List<VocabProgress> vocabProgresses)
         {
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
             if (user == null) return NotFound();
 
             user.VocabProgresses.AddRange(vocabProgresses);
+            _unitOfWork.Save();
 
             return Ok();
         }
+
+        // TODO
+        [HttpPost]
+        [Route("update-progress")]
+        public async Task<ActionResult> UpdateVocabsProgress([FromBody] List<VocabProgress> vocabProgresses)
+        {
+            //var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            //if (user == null) return NotFound();
+
+            //user.VocabProgresses.AddRange(vocabProgresses);
+
+            //return Ok();
+
+            throw new NotImplementedException();
+        }
+
 
         [HttpGet]
         [Route("get-options")]
