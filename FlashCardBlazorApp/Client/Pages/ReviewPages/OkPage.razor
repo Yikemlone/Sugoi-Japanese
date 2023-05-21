@@ -1,9 +1,113 @@
 ﻿@page "/ok"
 @attribute [Authorize(Policy = "IsCustomer")]
 
+@inject HttpClient Http
+@inject IdentityAuthenticationStateProvider AuthProvider
+@inject NavigationManager NavManager
 
-<h3>ModeratePage</h3>
+<style>
+    .save{
+        width: 400px;
+        margin-left: auto;
+        margin-right:auto;
+        display:flex;
+        justify-content:center;
+    }
+</style>
+
+<PageTitle>Ok Flash Cards</PageTitle>
+
+@if (_vocabs != null & _userOptions != null)
+{
+    <MudStack Class="pa-3 mt-12 pb-16" AlignItems="AlignItems.Center">
+
+        @if (_vocabs.Count > 0)
+        {
+            <MudText Typo="Typo.h6">@(_index + 1)/@_vocabs.Count</MudText>
+
+            <CascadingValue Value="_vocabs[_index]">
+                <FlashCard ChangeIndex="ChangeIndex" UserFlashCardOptions="@_userOptions" UpdateRating="UpdateRating"/>
+            </CascadingValue>
+
+
+            <div class="mt-10 save">
+                <MudButton Style="width:100%" OnClick="Save" Color="Color.Primary" Variant="Variant.Filled" Class="mt-16">Save</MudButton>
+            </div>
+        }
+        else
+        {
+            <MudText Typo="Typo.h5"><b>Ok.</b></MudText>
+        }
+
+    </MudStack>
+}
+else
+{
+    <MudStack AlignItems="AlignItems.Center" Class="mt-16">
+        <MudProgressLinear Indeterminate=true/>
+    </MudStack>
+}
+
 
 @code {
+    private const string API_URL = "api/customer";
+    private int _index = 0;
 
+    private List<Vocab> _vocabs;
+    private UserFlashCardOptions _userOptions;
+    private List<VocabProgress> _vocabProgresses;
+
+    private const int RATING = 1;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var user = (await AuthProvider.GetUserInfo());
+
+        if (user != null & user.IsAuthenticated)
+        {
+            _userOptions = await Http.GetFromJsonAsync<UserFlashCardOptions>(API_URL + "/get-options");
+            _vocabProgresses = await Http.GetFromJsonAsync<List<VocabProgress>>(API_URL + "/get-progress");
+            _vocabs = await Http.GetFromJsonAsync<List<Vocab>>(API_URL + $"/get-vocabs/rating/{RATING}");
+        }
+    }
+
+    protected async Task ChangeIndex(int number)
+    {
+        _index += number;
+
+        if (_index < 0)
+        {
+            _index = _vocabs.Count - 1;
+        }
+        else if (_index > (_vocabs.Count - 1))
+        {
+            _index = 0;
+        }
+    }
+
+    protected async Task UpdateRating(int rating)
+    {
+        var userID = (await AuthProvider.GetUserInfo()).UserId;
+        var index = _vocabProgresses.FindIndex(e => e.VocabID == _vocabs[_index].ID);
+
+        if (index != -1)
+        {
+            _vocabProgresses[index].ProgressRating = rating;
+        }
+        else
+        {
+            _vocabProgresses.Add(new VocabProgress
+            {
+                ApplicationUserId = new Guid(userID),
+                ProgressRating = rating,
+                VocabID = _vocabs[_index].ID,
+            });
+        }
+    }
+
+    private async void Save()
+    {
+        await Http.PostAsJsonAsync<List<VocabProgress>>(API_URL + "/update-progress", _vocabProgresses);
+        NavManager.NavigateTo("/home");
+    }
 }

@@ -7,5 +7,6 @@ namespace FlashCardBlazorApp.DataAccess.Services.VocabProgressService
     {
         Task<List<VocabProgress>> GetAll(Guid userID);
         void Update(VocabProgress vocabProgress);
+        Task UpdateRange(List<VocabProgress> vocabProgress);
     }
 }

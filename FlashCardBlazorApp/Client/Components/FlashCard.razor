@@ -9,7 +9,7 @@
     }
 
     .card {
-        width: 100%;
+        width: 100%;    
         height: 100%;
 
         position: relative;
@@ -65,12 +65,22 @@
 
                         @if (!flipped)
                         {
-                            <MudText Typo="Typo.body1">Expression: <b>@Vocab.VocabExpression</b></MudText>
-                            <MudText Typo="Typo.body1">Sentence Expression: @(new MarkupString(@Vocab.SentenceExpression))</MudText>
+                            @if (UserFlashCardOptions.Kanji)
+                            { 
+                                <MudText Typo="Typo.body1">Kanji: <b>@Vocab.VocabExpression</b></MudText>
+                                <MudText Typo="Typo.body1">Sentence Kanji: @(new MarkupString(@Vocab.SentenceExpression))</MudText>
+                            }
 
-                            <MudText Typo="Typo.body1">Sentence Kana: @(new MarkupString(@Vocab.SentenceKana))</MudText>
-                            <MudText Typo="Typo.body1">Vocab Furigana: @(new MarkupString(@Vocab.VocabFurigana))</MudText>
-                            <MudText Typo="Typo.body1">Sentence Furigana: @(new MarkupString(@Vocab.SentenceFurigana))</MudText>
+                            @if(UserFlashCardOptions.Kana)
+                            {
+                                <MudText Typo="Typo.body1">Sentence Kana: @(new MarkupString(@Vocab.SentenceKana))</MudText>
+                            }  
+                            
+                            @if(UserFlashCardOptions.Furigana)
+                            {
+                                <MudText Typo="Typo.body1">Vocab Furigana: @(new MarkupString(@Vocab.VocabFurigana))</MudText>
+                                <MudText Typo="Typo.body1">Sentence Furigana: @(new MarkupString(@Vocab.SentenceFurigana))</MudText>
+                            }
                         }
                         else
                         {

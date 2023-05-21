@@ -7,5 +7,6 @@ namespace FlashCardBlazorApp.DataAccess.Services.VocabService
     {
         void Update(Vocab vocab);
         Task<List<Vocab>> Get(UserFlashCardOptions userFlashCardOptions, List<VocabProgress> vocabProgresses);
+        Task<List<Vocab>> GetRatingVocabs(int rating, List<VocabProgress> vocabProgresses);
     }
 }

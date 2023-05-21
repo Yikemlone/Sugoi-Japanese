@@ -45,34 +45,15 @@ namespace FlashCardBlazorApp.Server.Controllers
 
             return Ok();
         }
-
-        // TODO
+        
         [HttpPost]
         [Route("update-progress")]
         public async Task<ActionResult> UpdateVocabsProgress([FromBody] List<VocabProgress> vocabProgresses)
         {
-            //var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
-
-            //if (user == null) return NotFound();
-
-            //user.VocabProgresses.AddRange(vocabProgresses);
-
-            //return Ok();
-
-            throw new NotImplementedException();
+            await _unitOfWork.VocabProgressRepository.UpdateRange(vocabProgresses);
+            _unitOfWork.Save();
+            return Ok();
         }
-
-        // TODO
-        [HttpGet]
-        [Route("get-progress/{rating}")]
-        public async Task<ActionResult<List<VocabProgress>>> GetCustomersVocabsProgressWithRating(int rating)
-        {
-            var userVocabs = await _unitOfWork.VocabProgressRepository.GetAll(new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier)));
-
-            if (userVocabs == null) return NotFound();
-            else return Ok(userVocabs);
-        }
-
 
         [HttpGet]
         [Route("get-options")]
@@ -99,13 +80,29 @@ namespace FlashCardBlazorApp.Server.Controllers
         }
 
         [HttpGet]
-        [Route("get-vocabs/{userID}")]
-        public async Task<ActionResult<List<Vocab>>> GetNewVocabs(string userID)
+        [Route("get-vocabs")]
+        public async Task<ActionResult<List<Vocab>>> GetNewVocabs()
         {
-            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            var userOptions = await _unitOfWork.UserOptionsRepository.Get(new Guid(userID));
+            var userID = (await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier))).Id;
 
-            var vocabs = await _unitOfWork.VocabRepository.Get(userOptions, user.VocabProgresses);
+            var vocabProgress = await _unitOfWork.VocabProgressRepository.GetAll(userID);
+            var userOptions = await _unitOfWork.UserOptionsRepository.Get(userID);
+
+            var vocabs = await _unitOfWork.VocabRepository.Get(userOptions, vocabProgress);
+
+            if (vocabs == null) return NotFound();
+            return Ok(vocabs);
+        } 
+
+        [HttpGet]
+        [Route("get-vocabs/rating/{rating}")]
+        public async Task<ActionResult<List<Vocab>>> GetRatingVocabs(int rating)
+        {
+            var userID = (await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier))).Id;
+
+            var vocabProgress = await _unitOfWork.VocabProgressRepository.GetAll(userID);
+
+            var vocabs = await _unitOfWork.VocabRepository.GetRatingVocabs(rating, vocabProgress);
 
             if (vocabs == null) return NotFound();
             return Ok(vocabs);

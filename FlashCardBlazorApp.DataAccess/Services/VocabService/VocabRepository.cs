@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System;
 using System.Reflection.Emit;
+using System.Security.Cryptography.X509Certificates;
 
 namespace FlashCardBlazorApp.DataAccess.Services.VocabService
 {
@@ -42,6 +43,31 @@ namespace FlashCardBlazorApp.DataAccess.Services.VocabService
                 .OrderBy(x => Guid.NewGuid())
                 .Take(userFlashCardOptions.WordsPerSession)
                 .ToListAsync();
+
+            return vocabs;
+        }
+
+        public async Task<List<Vocab>> GetRatingVocabs(int rating, List<VocabProgress> vocabProgresses)
+        {
+            List<int> vocabIDs = new();
+
+            if (rating == 3)
+            {
+                vocabIDs = vocabProgresses.Select(vp => vp.VocabID).ToList();
+            }
+            else 
+            {
+                vocabIDs = vocabProgresses.Where(vp => vp.ProgressRating == rating).Select(vp => vp.VocabID).ToList();
+            }
+
+            List<Vocab> vocabs = new();
+
+            IQueryable<Vocab> queryable =  _context.Vocabs
+                .AsNoTracking()
+                .Where(v => vocabIDs.Contains(v.ID))
+                .Select(e => e);
+
+            vocabs = await queryable.ToListAsync();
 
             return vocabs;
         }

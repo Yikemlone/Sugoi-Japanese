@@ -23,12 +23,23 @@ namespace FlashCardBlazorApp.DataAccess.Services.VocabProgressService
             return vocabProgress;
         }
 
-        public void Update(VocabProgress vocabProgress) 
+        public async void Update(VocabProgress vocabProgress) 
         {
             var vocabProgressFromDB = _context.VocabProgresses.FirstOrDefault(vp => vp.ID == vocabProgress.ID);
             if (vocabProgressFromDB == null) return;
 
             vocabProgressFromDB.ProgressRating = vocabProgress.ProgressRating;
+        }
+
+        public async Task UpdateRange(List<VocabProgress> vocabProgresses)
+        {
+            foreach (var vocabProgress in vocabProgresses)
+            {
+                var vocabProgressFromDB = _context.VocabProgresses.FirstOrDefault(vp => vp.ID == vocabProgress.ID);
+                if (vocabProgressFromDB == null) continue;
+
+                vocabProgressFromDB.ProgressRating = vocabProgress.ProgressRating;
+            }
         }
     }
 }
