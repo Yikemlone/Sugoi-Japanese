@@ -99,11 +99,13 @@ namespace FlashCardBlazorApp.Server.Controllers
         }
 
         [HttpGet]
-        [Route("get-vocabs/{wordsPerSession}")]
-        public async Task<ActionResult<List<Vocab>>> GetNewVocabs(int wordsPerSession)
+        [Route("get-vocabs/{userID}")]
+        public async Task<ActionResult<List<Vocab>>> GetNewVocabs(string userID)
         {
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            var vocabs = await _unitOfWork.VocabRepository.Get(wordsPerSession, user.VocabProgresses);
+            var userOptions = await _unitOfWork.UserOptionsRepository.Get(new Guid(userID));
+
+            var vocabs = await _unitOfWork.VocabRepository.Get(userOptions, user.VocabProgresses);
 
             if (vocabs == null) return NotFound();
             return Ok(vocabs);

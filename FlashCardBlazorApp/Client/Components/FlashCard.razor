@@ -4,6 +4,8 @@
     .card-container {
         width: 400px;
         height: 500px;
+
+        cursor: pointer;
     }
 
     .card {
@@ -37,11 +39,9 @@
     }
 
     .fab-buttons{
-        width: 100%;
-        
-        justify-content: space-between;
-        display: flex;
-        align-items: center;
+        height: 100%;
+        display:flex;
+        margin: auto;
     }
 
     .buttons {
@@ -50,47 +50,50 @@
 
 </style>
 
-<div class="card-container">
-    <div class="card  @(flipped ? "flipped" :"")">
+<MudStack Row=true>
 
-        <div class="card-content @(flipped ? "card-back" :"")">
+    <MudIconButton Class="fab-buttons" OnClick="LeftClick" Icon="@Icons.Material.Filled.ArrowLeft" Color="Color.Primary"/>
 
-            <MudStack Class="pa-4">
-                <MudText Typo="Typo.body1">JLPT Rating: <b>@Vocab.JLPT</b></MudText>
-                <MudText Typo="Typo.body1">Vocab Type: <b>@Vocab.VocabPos</b></MudText>
+    <div class="card-container">
+        <div @onclick="Flip" class="card  @(flipped ? "flipped" :"")">
 
-                @if (!flipped)
-                {
-                    <MudText Typo="Typo.body1">Expression: <b>@Vocab.VocabExpression</b></MudText>
-                    <MudText Typo="Typo.body1">Sentence Expression: @(new MarkupString(@Vocab.SentenceExpression))</MudText>
+            <div class="card-content @(flipped ? "card-back" :"")">
 
-                    <MudText Typo="Typo.body1">Sentence Kana: @(new MarkupString(@Vocab.SentenceKana))</MudText>
-                    <MudText Typo="Typo.body1">Vocab Furigana: @(new MarkupString(@Vocab.VocabFurigana))</MudText>
-                    <MudText Typo="Typo.body1">Sentence Furigana: @(new MarkupString(@Vocab.SentenceFurigana))</MudText>
-                }
-                else
-                {
-                    <MudText Typo="Typo.body1">Meaning: @Vocab.VocabMeaning</MudText>
-                    <MudText Typo="Typo.body1">Sentence Meaning:@Vocab.SentenceMeaning</MudText>
-                }
-            </MudStack>
-        </div>
+                <MudStack Class="pa-4">
+                    <MudText Typo="Typo.body1">JLPT Rating: <b>@Vocab.JLPT</b></MudText>
+                    <MudText Typo="Typo.body1">Vocab Type: <b>@Vocab.VocabPos</b></MudText>
 
-    </div>    
-    
-    <div class="fab-buttons mt-1">
-        <MudIconButton OnClick="LeftClick" Icon="@Icons.Material.Filled.ArrowLeft" Color="Color.Secondary"/>
-        <MudButton Class="buttons" Color="Color.Secondary" Variant="Variant.Outlined" OnClick="Flip">Flip</MudButton>
-        <MudIconButton OnClick="RightClick" Icon="@Icons.Material.Filled.ArrowRight" Color="Color.Secondary"/>
+                        @if (!flipped)
+                        {
+                            <MudText Typo="Typo.body1">Expression: <b>@Vocab.VocabExpression</b></MudText>
+                            <MudText Typo="Typo.body1">Sentence Expression: @(new MarkupString(@Vocab.SentenceExpression))</MudText>
+
+                            <MudText Typo="Typo.body1">Sentence Kana: @(new MarkupString(@Vocab.SentenceKana))</MudText>
+                            <MudText Typo="Typo.body1">Vocab Furigana: @(new MarkupString(@Vocab.VocabFurigana))</MudText>
+                            <MudText Typo="Typo.body1">Sentence Furigana: @(new MarkupString(@Vocab.SentenceFurigana))</MudText>
+                        }
+                        else
+                        {
+                            <MudText Typo="Typo.body1">Meaning: @Vocab.VocabMeaning</MudText>
+                            <MudText Typo="Typo.body1">Sentence Meaning:@Vocab.SentenceMeaning</MudText>
+                        }
+                </MudStack>
+            </div>
+
+        </div>    
+
+        <MudStack Row="true" Spacing="2" Justify="Justify.SpaceEvenly" Class="mt-3">
+            <MudButton OnClick="Bad" Class="buttons" Color="Color.Error" Variant="Variant.Outlined">HARD</MudButton>
+            <MudButton OnClick="Ok" Class="buttons" Color="Color.Surface" Variant="Variant.Outlined">OK</MudButton>
+            <MudButton OnClick="Good" Class="buttons" Color="Color.Success" Variant="Variant.Outlined">EASY</MudButton>
+        </MudStack>
+
     </div>
 
-    <MudStack Row="true" Spacing="2" Justify="Justify.SpaceEvenly" Class="mt-3">
-        <MudButton OnClick="Bad" Class="buttons" Color="Color.Error" Variant="Variant.Outlined">HARD</MudButton>
-        <MudButton OnClick="Ok" Class="buttons" Color="Color.Surface" Variant="Variant.Outlined">OK</MudButton>
-        <MudButton OnClick="Good" Class="buttons" Color="Color.Success" Variant="Variant.Outlined">EASY</MudButton>
-    </MudStack>
+    <MudIconButton Class="fab-buttons" OnClick="RightClick" Icon="@Icons.Material.Filled.ArrowRight" Color="Color.Primary"/>
 
-</div>
+</MudStack>
+
 
 @code {
     private bool flipped;

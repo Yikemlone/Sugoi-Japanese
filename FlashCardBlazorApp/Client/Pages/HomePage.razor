@@ -24,7 +24,7 @@
 
             <AuthorizeView>
                 <MudItem sm="12">
-                    <MudText Typo="Typo.h2" Class="pl-10">Welcome back <b>@context.User.Identity.Name!</b></MudText>
+                    <MudText Typo="Typo.h2" Class="pl-10">WELCOME <b>@context.User.Identity.Name.ToUpper()!</b></MudText>
                 </MudItem>
             </AuthorizeView>
 
@@ -38,7 +38,7 @@
 
                     <div class="absolute pa-5 mt-10" style="width:inherit; height:inherit">
                         <InspiringQuotes/>
-                        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Href="/flashcards" Class="mt-5 mb-16">
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" Href="/flashcards" Class="mt-5 mb-16">
                             <MudText Color="Color.Inherit" Typo="Typo.h6">NEW WORDS</MudText>
                         </MudButton>
                     </div>

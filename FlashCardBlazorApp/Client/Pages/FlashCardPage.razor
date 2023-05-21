@@ -19,16 +19,25 @@
 @if (_vocabs != null & _userOptions != null & _vocabProgresses != null)
 {
     <MudStack Class="pa-3 mt-12 pb-16" AlignItems="AlignItems.Center">
-        <MudText Typo="Typo.h6">@(_index+1)/@_vocabs.Count</MudText>
 
-        <CascadingValue Value="_vocabs[_index]">
-            <FlashCard ChangeIndex="ChangeIndex" UserFlashCardOptions="@_userOptions" UpdateRating="UpdateRating"/>
-        </CascadingValue>
+        @if (_vocabs.Count > 0)
+        {
+            <MudText Typo="Typo.h6">@(_index + 1)/@_vocabs.Count</MudText>
 
-        <div class="mt-10 save">
-            <MudButton Style="width:100%" OnClick="Save" Color="Color.Primary" Variant="Variant.Filled" Class="mt-16">Save</MudButton>
-        </div>
+            <CascadingValue Value="_vocabs[_index]">
+                <FlashCard ChangeIndex="ChangeIndex" UserFlashCardOptions="@_userOptions" UpdateRating="UpdateRating"/>
+            </CascadingValue>
 
+
+            <div class="mt-10 save">
+                <MudButton Style="width:100%" OnClick="Save" Color="Color.Primary" Variant="Variant.Filled" Class="mt-16">Save</MudButton>
+            </div>
+        } 
+        else
+        {
+            <MudText Typo="Typo.h5"><b>Whoops!</b> Looks like something went wrong, try changing your user opitons and try again!</MudText>
+        }
+        
     </MudStack>
 } 
 else 
@@ -52,12 +61,12 @@ else
     {
         _vocabProgresses = new();
 
-        var user = (await AuthProvider.GetAuthenticationStateAsync()).User.Identity;
+        var user = (await AuthProvider.GetUserInfo());
 
         if (user != null & user.IsAuthenticated)
         {
             _userOptions = await Http.GetFromJsonAsync<UserFlashCardOptions>(API_URL + "/get-options");
-            _vocabs = await Http.GetFromJsonAsync<List<Vocab>>(API_URL + $"/get-vocabs/{_userOptions.WordsPerSession}");
+            _vocabs = await Http.GetFromJsonAsync<List<Vocab>>(API_URL + $"/get-vocabs/{user.UserId}");
         }
     }
 

@@ -6,6 +6,6 @@ namespace FlashCardBlazorApp.DataAccess.Services.VocabService
     public interface IVocabRepository : IRepository<Vocab>
     {
         void Update(Vocab vocab);
-        Task<List<Vocab>> Get(int wordsPerSession, List<VocabProgress> vocabProgresses);
+        Task<List<Vocab>> Get(UserFlashCardOptions userFlashCardOptions, List<VocabProgress> vocabProgresses);
     }
 }

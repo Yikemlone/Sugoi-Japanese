@@ -2,6 +2,9 @@
 using FlashCardBlazorApp.DataAccess.Services.RepositoryService;
 using FlashCardBlazorApp.Models.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System;
+using System.Reflection.Emit;
 
 namespace FlashCardBlazorApp.DataAccess.Services.VocabService
 {
@@ -14,30 +17,33 @@ namespace FlashCardBlazorApp.DataAccess.Services.VocabService
             _context = context;
         }
 
-        public async Task<List<Vocab>> Get(int wordsPerSession, List<VocabProgress> vocabProgresses)
+        public async Task<List<Vocab>> Get(UserFlashCardOptions userFlashCardOptions, List<VocabProgress> vocabProgresses)
         {
             var vocabIDs = vocabProgresses.Select(vp => vp.VocabID).ToList();
+            List<Vocab> vocabs = new();
+            IQueryable<Vocab> queryable = _context.Vocabs.Select(e => e);
 
-            var randomRecords = _context.Vocabs
+            if (!userFlashCardOptions.JLPT.Equals("All") && !userFlashCardOptions.VocabPosFilter.Equals("All"))
+            {
+                queryable = queryable
+                    .Where(v => v.VocabPos.Equals(userFlashCardOptions.VocabPosFilter) && v.JLPT.Equals(userFlashCardOptions.JLPT));
+            }
+            else if (!userFlashCardOptions.VocabPosFilter.Equals("All"))
+            {
+                queryable = queryable.Where(v => v.VocabPos.Equals(userFlashCardOptions.VocabPosFilter));
+            }
+            else if (!userFlashCardOptions.JLPT.Equals("All"))
+            {
+                queryable = queryable.Where(v => v.JLPT.Equals(userFlashCardOptions.JLPT));
+            }
+
+            vocabs = await queryable
                 .Where(x => !vocabIDs.Contains(x.ID))
                 .OrderBy(x => Guid.NewGuid())
-                .Take(wordsPerSession)
-                .ToList();
+                .Take(userFlashCardOptions.WordsPerSession)
+                .ToListAsync();
 
-            return randomRecords;
-
-            //var vocabIDs = vocabProgresses.Select(vp => vp.VocabID).ToList();
-            //var pageSize = 50;
-
-            //var randomRecords = new List<Vocab>();
-
-            //var chunk = _context.Vocabs
-            //    .Take(pageSize)
-            //    .Where(x => !vocabIDs.Contains(x.ID))
-            //    .OrderBy(x => Guid.NewGuid())
-            //    .ToList();
-
-            //return randomRecords;
+            return vocabs;
         }
 
         public void Update(Vocab vocab) 
