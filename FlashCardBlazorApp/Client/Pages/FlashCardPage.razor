@@ -5,11 +5,15 @@
 
 <PageTitle>Flash Cards</PageTitle>
 
-@if (vocabs.Count > 0) 
+@if (vocabs != null & _userOptions != null) 
 {
-    <MudStack Class="pa-3 mt-12" AlignItems="AlignItems.Center">
+    <MudStack Class="pa-3 mt-12 pb-16" AlignItems="AlignItems.Center">
         <MudText Typo="Typo.h6">@(_index+1)/@vocabs.Count</MudText>
-        <FlashCard ChangeIndex="ChangeIndex" Vocab="@vocabs[_index]"/>
+
+        <CascadingValue Value="vocabs[_index]">
+            <FlashCard ChangeIndex="ChangeIndex" UserFlashCardOptions="@_userOptions"/>
+        </CascadingValue>
+        
     </MudStack>
 } 
 else 
@@ -24,8 +28,8 @@ else
     private const string API_URL = "api/customer";
     private int _index = 0;
 
-    private List<Vocab> vocabs = new();
-    private UserFlashCardOptions _userOptions = new();
+    protected List<Vocab> vocabs;
+    protected UserFlashCardOptions _userOptions;
 
     protected override async Task OnInitializedAsync()
     {
@@ -50,5 +54,7 @@ else
         {
             _index = 0;
         }
+
+        this.StateHasChanged();
     }
 }

@@ -2,8 +2,8 @@
 
 <style>
     .card-container {
-        width: 380px;
-        height: 650px;
+        width: 400px;
+        height: 550px;
     }
 
     .card {
@@ -14,8 +14,7 @@
 
         background-color: #0b423f;
 
-        transition: transform 1500ms;
-        transform-style: preserve-3d;
+        transition: transform 1000ms;
     }
 
     .card-content {
@@ -25,6 +24,8 @@
 
         position: absolute;
         overflow: hidden;
+
+        transition: transform 500ms;
     }
 
     .card-back {
@@ -37,11 +38,14 @@
 
     .fab-buttons{
         width: 100%;
-        height: 0%;
         
         justify-content: space-between;
         display: flex;
         align-items: center;
+    }
+
+    .buttons {
+        width: 100%;
     }
 
 </style>
@@ -59,6 +63,12 @@
                 {
                     <MudText Typo="Typo.body1">Expression: <b>@Vocab.VocabExpression</b></MudText>
                     <MudText Typo="Typo.body1">Sentence Expression: @(new MarkupString(@Vocab.SentenceExpression))</MudText>
+
+                    <audio controls>
+                        <source src="sounds/@(Vocab.VocabSounds)" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                    
                     <MudText Typo="Typo.body1">Sentence Kana: @(new MarkupString(@Vocab.SentenceKana))</MudText>
                     <MudText Typo="Typo.body1">Vocab Furigana: @(new MarkupString(@Vocab.VocabFurigana))</MudText>
                     <MudText Typo="Typo.body1">Sentence Furigana: @(new MarkupString(@Vocab.SentenceFurigana))</MudText>
@@ -68,19 +78,23 @@
                     <MudText Typo="Typo.body1">Meaning: @Vocab.VocabMeaning</MudText>
                     <MudText Typo="Typo.body1">Sentence Meaning:@Vocab.SentenceMeaning</MudText>
                 }
-
-                <MudButton Color="Color.Secondary" Variant="Variant.Outlined" OnClick="Flip">Flip</MudButton>
-
             </MudStack>
-            
         </div>
 
+    </div>    
+    
+    <div class="fab-buttons">
+        <MudIconButton OnClick="LeftClick" Icon="@Icons.Material.Filled.ArrowLeft" Color="Color.Secondary"/>
+        <MudButton Class="buttons" Color="Color.Secondary" Variant="Variant.Outlined" OnClick="Flip">Flip</MudButton>
+        <MudIconButton OnClick="RightClick" Icon="@Icons.Material.Filled.ArrowRight" Color="Color.Secondary"/>
     </div>
 
-    <div class="fab-buttons">
-        <MudFab OnClick="LeftClick" StartIcon="@Icons.Material.Filled.ArrowLeft" Color="Color.Secondary"></MudFab>
-        <MudFab OnClick="RightClick" StartIcon="@Icons.Material.Filled.ArrowRight" Color="Color.Secondary"></MudFab>
-    </div>
+    <MudStack Row="true" Spacing="0" Justify="Justify.Center">
+        <MudButton Color="Color.Secondary" Variant="Variant.Outlined">BAD</MudButton>
+        <MudButton Color="Color.Secondary" Variant="Variant.Outlined">OK</MudButton>
+        <MudButton Color="Color.Secondary" Variant="Variant.Outlined">GOOD</MudButton>
+    </MudStack>
+
 </div>
 
 
@@ -91,17 +105,19 @@
 
     [Parameter] public EventCallback<int> ChangeIndex { get; set; }
 
-    [Parameter] public Vocab Vocab { get; set; }
+    [CascadingParameter] public Vocab Vocab { get; set; }
     [Parameter] public UserFlashCardOptions UserFlashCardOptions { get; set; }
 
     private async void RightClick() 
     {
         await ChangeIndex.InvokeAsync(1);
+        //await InvokeAsync(() => StateHasChanged());
     }
 
-    private async Task LeftClick()
-    { 
+    private async void LeftClick()
+    {
         await ChangeIndex.InvokeAsync(-1);
+        //await InvokeAsync(() => StateHasChanged());
     }
 }
 
