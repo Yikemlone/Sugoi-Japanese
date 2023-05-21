@@ -82,6 +82,7 @@ namespace FlashCardBlazorApp.Server.Controllers
             {
                 IsAuthenticated = User.Identity.IsAuthenticated,
                 UserName = User.Identity.Name,
+                UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
                 ExposedClaims = User.Claims
                     .ToDictionary(c => c.Type, c => c.Value)
             };

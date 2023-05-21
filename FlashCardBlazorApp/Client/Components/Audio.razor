@@ -1,0 +1,20 @@
+﻿@inherits ComponentBase
+
+<audio ref="@audioElement" controls></audio>
+
+@code {
+    [Parameter] public string SoundFile { get; set; }
+
+    private ElementReference audioElement;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+
+        //await audioElement.InvokeAsync(async () =>
+        //{
+        //    await JSRuntime.InvokeVoidAsync("eval", $"document.querySelector('audio').src = '{newAudioSource}'");
+        //    await JSRuntime.InvokeVoidAsync("eval", "document.querySelector('audio').load()");
+        //});
+    }
+}

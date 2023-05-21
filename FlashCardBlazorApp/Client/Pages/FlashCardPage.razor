@@ -1,17 +1,17 @@
 ﻿@page "/flashcards"
 @attribute [Authorize(Policy= "IsCustomer")]
 @inject HttpClient Http
-@inject AuthenticationStateProvider AuthProvider
+@inject IdentityAuthenticationStateProvider AuthProvider
 
 <PageTitle>Flash Cards</PageTitle>
 
-@if (vocabs != null & _userOptions != null) 
+@if (_vocabs != null & _userOptions != null & _vocabProgresses != null)
 {
     <MudStack Class="pa-3 mt-12 pb-16" AlignItems="AlignItems.Center">
-        <MudText Typo="Typo.h6">@(_index+1)/@vocabs.Count</MudText>
+        <MudText Typo="Typo.h6">@(_index+1)/@_vocabs.Count</MudText>
 
-        <CascadingValue Value="vocabs[_index]">
-            <FlashCard ChangeIndex="ChangeIndex" UserFlashCardOptions="@_userOptions"/>
+        <CascadingValue Value="_vocabs[_index]">
+            <FlashCard ChangeIndex="ChangeIndex" UserFlashCardOptions="@_userOptions" UpdateRating="UpdateRating"/>
         </CascadingValue>
         
     </MudStack>
@@ -28,17 +28,21 @@ else
     private const string API_URL = "api/customer";
     private int _index = 0;
 
-    protected List<Vocab> vocabs;
-    protected UserFlashCardOptions _userOptions;
+    private List<Vocab> _vocabs;
+    private UserFlashCardOptions _userOptions;
+    private List<VocabProgress> _vocabProgresses;
+
 
     protected override async Task OnInitializedAsync()
     {
+        _vocabProgresses = new();
+
         var user = (await AuthProvider.GetAuthenticationStateAsync()).User.Identity;
 
         if (user != null & user.IsAuthenticated)
         {
             _userOptions = await Http.GetFromJsonAsync<UserFlashCardOptions>(API_URL + "/get-options");
-            vocabs = await Http.GetFromJsonAsync<List<Vocab>>(API_URL + $"/get-vocabs/{_userOptions.WordsPerSession}");
+            _vocabs = await Http.GetFromJsonAsync<List<Vocab>>(API_URL + $"/get-vocabs/{_userOptions.WordsPerSession}");
         }
     }
 
@@ -48,13 +52,31 @@ else
 
         if (_index < 0)
         {
-            _index = vocabs.Count - 1;
+            _index = _vocabs.Count - 1;
         }
-        else if (_index > (vocabs.Count - 1)) 
+        else if (_index > (_vocabs.Count - 1)) 
         {
             _index = 0;
         }
+    }
 
-        this.StateHasChanged();
+    protected async Task UpdateRating(int rating) 
+    {
+        var userID = (await AuthProvider.GetUserInfo()).UserId;
+        var index = _vocabProgresses.FindIndex(e => e.VocabID == _vocabs[_index].ID);
+
+        if (index != -1)
+        {
+            _vocabProgresses[index].ProgressRating = rating;
+        }
+        else 
+        {
+            _vocabProgresses.Add(new VocabProgress
+            {
+                ApplicationUserId = new Guid(userID),
+                ProgressRating = rating,
+                VocabID = _vocabs[_index].ID,
+            });
+        }
     }
 }

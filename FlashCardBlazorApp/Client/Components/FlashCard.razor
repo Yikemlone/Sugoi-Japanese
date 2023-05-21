@@ -64,11 +64,6 @@
                     <MudText Typo="Typo.body1">Expression: <b>@Vocab.VocabExpression</b></MudText>
                     <MudText Typo="Typo.body1">Sentence Expression: @(new MarkupString(@Vocab.SentenceExpression))</MudText>
 
-                    <audio controls>
-                        <source src="sounds/@(Vocab.VocabSounds)" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                    </audio>
-                    
                     <MudText Typo="Typo.body1">Sentence Kana: @(new MarkupString(@Vocab.SentenceKana))</MudText>
                     <MudText Typo="Typo.body1">Vocab Furigana: @(new MarkupString(@Vocab.VocabFurigana))</MudText>
                     <MudText Typo="Typo.body1">Sentence Furigana: @(new MarkupString(@Vocab.SentenceFurigana))</MudText>
@@ -90,34 +85,54 @@
     </div>
 
     <MudStack Row="true" Spacing="0" Justify="Justify.Center">
-        <MudButton Color="Color.Secondary" Variant="Variant.Outlined">BAD</MudButton>
-        <MudButton Color="Color.Secondary" Variant="Variant.Outlined">OK</MudButton>
-        <MudButton Color="Color.Secondary" Variant="Variant.Outlined">GOOD</MudButton>
+        <MudButton OnClick="Bad" Color="Color.Secondary" Variant="Variant.Outlined">BAD</MudButton>
+        <MudButton OnClick="Ok" Color="Color.Secondary" Variant="Variant.Outlined">OK</MudButton>
+        <MudButton OnClick="Good" Color="Color.Secondary" Variant="Variant.Outlined">GOOD</MudButton>
     </MudStack>
 
 </div>
-
-
 
 @code {
     private bool flipped;
     private async Task Flip() => flipped = !flipped;
 
-    [Parameter] public EventCallback<int> ChangeIndex { get; set; }
-
     [CascadingParameter] public Vocab Vocab { get; set; }
+    [Parameter] public EventCallback<int> ChangeIndex { get; set; }
+    [Parameter] public EventCallback<int> UpdateRating { get; set; }
     [Parameter] public UserFlashCardOptions UserFlashCardOptions { get; set; }
 
     private async void RightClick() 
     {
+        if (flipped)
+        {
+            Flip();
+        }
+
         await ChangeIndex.InvokeAsync(1);
-        //await InvokeAsync(() => StateHasChanged());
     }
 
     private async void LeftClick()
     {
+        if (flipped)
+        {
+            Flip();
+        }
+
         await ChangeIndex.InvokeAsync(-1);
-        //await InvokeAsync(() => StateHasChanged());
+    }
+
+    private async void Bad()
+    {
+        await UpdateRating.InvokeAsync(0);
+    }
+
+    private async void Ok()
+    {
+        await UpdateRating.InvokeAsync(1);
+    }
+
+    private async void Good() 
+    { 
+        await UpdateRating.InvokeAsync(2);
     }
 }
-

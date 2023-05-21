@@ -1,8 +1,8 @@
 ﻿@page "/home"
 @using System.Security.Claims
 @inject NavigationManager NavManager
-@inject AuthenticationStateProvider AuthProvider
 @inject HttpClient Http
+@inject IdentityAuthenticationStateProvider AuthProvider
 @attribute [Authorize(Policy = "IsCustomer")]
 
 <PageTitle>Home</PageTitle>

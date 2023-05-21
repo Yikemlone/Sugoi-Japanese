@@ -33,7 +33,7 @@ namespace FlashCardBlazorApp.DataAccess.Services.AuthorizeServices
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
         }
 
-        private async Task<UserInfo> GetUserInfo()
+        public async Task<UserInfo> GetUserInfo()
         {
             if (_userInfoCache != null && _userInfoCache.IsAuthenticated) return _userInfoCache;
             _userInfoCache = await _authorizeApi.GetUserInfo();
