@@ -1,4 +1,7 @@
-﻿<h3>EasyPage</h3>
+﻿@page "/easy"
+@attribute [Authorize(Policy = "IsCustomer")]
+
+<h3>EasyPage</h3>
 
 @code {
 

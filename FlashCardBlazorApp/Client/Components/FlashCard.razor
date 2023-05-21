@@ -85,9 +85,9 @@
     </div>
 
     <MudStack Row="true" Spacing="2" Justify="Justify.SpaceEvenly" Class="mt-3">
-        <MudButton OnClick="Bad" Class="buttons" Color="Color.Error" Variant="Variant.Outlined">BAD</MudButton>
+        <MudButton OnClick="Bad" Class="buttons" Color="Color.Error" Variant="Variant.Outlined">HARD</MudButton>
         <MudButton OnClick="Ok" Class="buttons" Color="Color.Surface" Variant="Variant.Outlined">OK</MudButton>
-        <MudButton OnClick="Good" Class="buttons" Color="Color.Success" Variant="Variant.Outlined">GOOD</MudButton>
+        <MudButton OnClick="Good" Class="buttons" Color="Color.Success" Variant="Variant.Outlined">EASY</MudButton>
     </MudStack>
 
 </div>
@@ -123,16 +123,19 @@
 
     private async void Bad()
     {
+        RightClick();
         await UpdateRating.InvokeAsync(0);
     }
 
     private async void Ok()
     {
+        RightClick();
         await UpdateRating.InvokeAsync(1);
     }
 
     private async void Good() 
-    { 
+    {
+        RightClick();
         await UpdateRating.InvokeAsync(2);
     }
 }

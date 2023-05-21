@@ -26,10 +26,10 @@ namespace FlashCardBlazorApp.Server.Controllers
         [Route("get-progress")]
         public async Task<ActionResult<List<VocabProgress>>> GetCustomersVocabsProgress()
         {
-            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var userVocabs = await _unitOfWork.VocabProgressRepository.GetAll(new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier)));
 
-            if (user == null) return NotFound();
-            else return Ok(user.VocabProgresses);
+            if (userVocabs == null) return NotFound();
+            else return Ok(userVocabs);
         }
 
         [HttpPost]
@@ -60,6 +60,17 @@ namespace FlashCardBlazorApp.Server.Controllers
             //return Ok();
 
             throw new NotImplementedException();
+        }
+
+        // TODO
+        [HttpGet]
+        [Route("get-progress/{rating}")]
+        public async Task<ActionResult<List<VocabProgress>>> GetCustomersVocabsProgressWithRating(int rating)
+        {
+            var userVocabs = await _unitOfWork.VocabProgressRepository.GetAll(new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier)));
+
+            if (userVocabs == null) return NotFound();
+            else return Ok(userVocabs);
         }
 
 

@@ -1,6 +1,7 @@
 ﻿using FlashCardBlazorApp.DataAccess.Data;
 using FlashCardBlazorApp.DataAccess.Services.RepositoryService;
 using FlashCardBlazorApp.Models.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FlashCardBlazorApp.DataAccess.Services.VocabProgressService
 {
@@ -11,6 +12,15 @@ namespace FlashCardBlazorApp.DataAccess.Services.VocabProgressService
         public VocabProgressRepository(ApplicationDbContext context) : base(context) 
         {
             _context = context;
+        }
+
+        public async Task<List<VocabProgress>> GetAll(Guid userID)
+        {
+            var vocabProgress = await _context.VocabProgresses
+                .Where(u => u.ApplicationUserId == userID)
+                .ToListAsync();
+
+            return vocabProgress;
         }
 
         public void Update(VocabProgress vocabProgress) 

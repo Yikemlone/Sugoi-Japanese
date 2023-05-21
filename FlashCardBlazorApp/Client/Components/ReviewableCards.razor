@@ -1,53 +1,20 @@
 ﻿@inherits ComponentBase
 
-<MudStack Row=true AlignItems="AlignItems.Center" Spacing="6">
+<MudCard Style="width: 100%; padding: 0;">   
+    <MudCardContent>
+        <MudText Typo="Typo.body2">@Title</MudText>
+        <MudText Typo="Typo.h3" Color="@Color" >@Number</MudText>
+    </MudCardContent>
 
-    <MudCard>   
-        <MudCardContent>
-            <MudText>Bad Vocabs</MudText>
-            <MudText Typo="Typo.body2">The quick, brown fox jumps over a lazy dog.</MudText>
-        </MudCardContent>
+    <MudCardActions Class="pa-3">
+        <MudButton Href="@Link" Variant="Variant.Outlined" Color="Color.Secondary">Review</MudButton>
+    </MudCardActions>
+</MudCard>
 
-        <MudCardActions>
-            <MudButton Variant="Variant.Text" Color="Color.Primary">Review</MudButton>
-        </MudCardActions>
-    </MudCard>
-
-    <MudCard>   
-        <MudCardContent>
-            <MudText>Ok Vocabs</MudText>
-            <MudText Typo="Typo.body2">The quick, brown fox jumps over a lazy dog.</MudText>
-        </MudCardContent>
-
-        <MudCardActions>
-            <MudButton Variant="Variant.Text" Color="Color.Primary">Review</MudButton>
-        </MudCardActions>
-    </MudCard>
-
-    <MudCard>   
-        <MudCardContent>
-            <MudText>Good Vocabs</MudText>
-            <MudText Typo="Typo.body2">The quick, brown fox jumps over a lazy dog.</MudText>
-        </MudCardContent>
-
-        <MudCardActions>
-            <MudButton Variant="Variant.Text" Color="Color.Primary">Review</MudButton>
-        </MudCardActions>
-    </MudCard>
-
-    <MudCard>   
-        <MudCardContent>
-            <MudText>All Vocabs</MudText>
-            <MudText Typo="Typo.body2">The quick, brown fox jumps over a lazy dog.</MudText>
-        </MudCardContent>
-
-        <MudCardActions>
-            <MudButton Variant="Variant.Text" Color="Color.Primary">Review</MudButton>
-        </MudCardActions>
-    </MudCard>
-
-</MudStack>
 
 @code {
-
+    [Parameter] public string Title { get; set; }
+    [Parameter] public int Number { get; set; }
+    [Parameter] public Color Color { get; set; }
+    [Parameter] public string Link { get; set; }
 }

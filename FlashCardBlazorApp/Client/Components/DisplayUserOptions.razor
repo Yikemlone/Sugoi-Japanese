@@ -1,5 +1,6 @@
 ﻿@inherits ComponentBase 
 @inject HttpClient Http
+@inject ISnackbar Snackbar
 
 <MudForm>
     <MudText Typo="Typo.h6">User Options</MudText>
@@ -43,5 +44,13 @@
     private async Task OnSubmit()
     {
         await Http.PostAsJsonAsync<UserFlashCardOptions>("api/customer/set-options", UserFlashCardOptions);
+
+        Snackbar.Configuration.SnackbarVariant = Variant.Outlined;
+        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopRight;
+        Snackbar.Add("Options Updated", Severity.Success, config =>
+        {
+            config.VisibleStateDuration = 100;
+            config.Icon = @Icons.Material.Outlined.Check;
+        });
     }
 }

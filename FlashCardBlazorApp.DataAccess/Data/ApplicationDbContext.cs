@@ -24,16 +24,6 @@ namespace FlashCardBlazorApp.DataAccess.Data
 
             List<Vocab> vocabs = new List<Vocab>();
 
-            //modelBuilder.Entity<VocabProgress>()
-            //    .HasOne(vp => vp.ApplicationUser)
-            //    .WithMany(au => au.VocabProgresses)
-            //    .HasForeignKey(vp => vp.ApplicationUserId);
-
-            //modelBuilder.Entity<UserFlashCardOptions>()
-            //    .HasOne(uo => uo.ApplicationUser)
-            //    .WithOne(au => au.UserFlashCardOptions)
-            //    .HasForeignKey<UserFlashCardOptions>(uo => uo.ApplicationUserId);
-
             var dir = new DirectoryInfo(Environment.CurrentDirectory).Parent.FullName;
             var csvLines = System.IO.File.ReadAllLines(dir + @"\Shared\japanese.csv");
             string pattern = @",(?=(?:[^']*'[^']*')*(?![^']*'))"; // ignores commas inside single quotes
@@ -66,8 +56,6 @@ namespace FlashCardBlazorApp.DataAccess.Data
             }
 
             modelBuilder.Entity<Vocab>().HasData(vocabs);
-
-            modelBuilder.Entity<ApplicationUser>().Navigation(e => e.VocabProgresses).AutoInclude();
         }
     }
 }
